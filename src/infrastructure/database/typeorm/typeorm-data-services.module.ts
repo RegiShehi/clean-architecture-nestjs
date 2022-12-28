@@ -1,27 +1,33 @@
 import { Module } from '@nestjs/common';
 import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
 import { TypeOrmDataServices } from './typeorm-data-services.service';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
+import { EnvironmentConfigService } from 'src/services/configuration/environment-config.service';
+import { EnvironmentConfigModule } from 'src/services/configuration/environment-config.module';
 import Author from './entities/author.entity';
 import Book from './entities/book.entity';
+
+export const getTypeOrmModuleOptions = (
+  config: EnvironmentConfigService,
+): TypeOrmModuleOptions =>
+  ({
+    type: 'postgres',
+    host: 'clean-architecture-db', //config.getDatabaseHost(),
+    port: config.getDatabasePort(),
+    username: config.getDatabaseUser(),
+    password: config.getDatabasePassword(),
+    database: config.getDatabaseName(),
+    entities: [__dirname + './../../**/*.entity{.ts,.js}'],
+    synchronize: true,
+  } as TypeOrmModuleOptions);
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Author, Book]),
     TypeOrmModule.forRootAsync({
-      imports: [ConfigModule],
-      inject: [ConfigService],
-      useFactory: (configService: ConfigService) => ({
-        type: 'postgres',
-        host: configService.get('POSTGRES_HOST'),
-        port: configService.get('POSTGRES_PORT'),
-        username: configService.get('POSTGRES_USER'),
-        password: configService.get('POSTGRES_PASSWORD'),
-        database: configService.get('POSTGRES_DB'),
-        entities: [__dirname + './../../**/*.entity{.ts,.js}'],
-        synchronize: true,
-      }),
+      imports: [EnvironmentConfigModule],
+      inject: [EnvironmentConfigService],
+      useFactory: getTypeOrmModuleOptions,
     }),
   ],
   providers: [
