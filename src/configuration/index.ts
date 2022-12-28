@@ -1,8 +1,8 @@
-// export const DATA_BASE_CONFIGURATION = {
-//   mongoConnectionString: `mongodb://admin:admin@localhost:27017`,
-// };
-
-export const Configuration = () => ({
-  NODE_ENV: process.env.NODE_ENV,
-  SERVER_PORT: parseInt(process.env.SERVER_PORT, 10) || 3000,
-});
+export const Configuration = {
+  POSTGRES_USER: 'POSTGRES_USER',
+  POSTGRES_PASSWORD: 'POSTGRES_PASSWORD',
+  POSTGRES_DB: 'POSTGRES_DB',
+  POSTGRES_HOST: 'POSTGRES_HOST',
+  POSTGRES_PORT: 'POSTGRES_PORT',
+  SERVER_PORT: 'SERVER_PORT',
+};

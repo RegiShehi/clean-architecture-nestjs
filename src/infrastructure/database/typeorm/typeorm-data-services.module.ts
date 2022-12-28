@@ -12,6 +12,7 @@ export const getTypeOrmModuleOptions = (
 ): TypeOrmModuleOptions =>
   ({
     type: 'postgres',
+    // Since postgres and nestjs are running in docker need to use postgres container name as host
     host: 'clean-architecture-db', //config.getDatabaseHost(),
     port: config.getDatabasePort(),
     username: config.getDatabaseUser(),
