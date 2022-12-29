@@ -2,11 +2,11 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
-import Author from './entities/author.entity';
 import { TypeOrmGenericRepository } from './typeorm-generic-repository';
 import { IBookRepository } from 'src/domain/abstracts/book-repository.abstract';
 import { BookRepository } from 'src/infrastructure/repositories/book-repository';
 import Book from './entities/book.entity';
+import Author from './entities/author.entity';
 
 @Injectable()
 export class TypeOrmDataServices

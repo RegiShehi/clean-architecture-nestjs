@@ -1,5 +1,5 @@
-import { Controller, Get, Param } from '@nestjs/common';
-// import { CreateAuthorDto } from 'src/domain/dtos/author.dto';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { CreateAuthorDto } from 'src/domain/dtos/author.dto';
 import { AuthorUseCases } from 'src/use-cases/author/author.use-case';
 
 @Controller('api/author')
@@ -12,14 +12,14 @@ export class AuthorController {
   }
 
   @Get(':id')
-  async getById(@Param('id') id: any) {
+  async getById(@Param('id') id: number) {
     return this.authorUseCases.getAuthorById(id);
   }
 
-  // @Post()
-  // createAuthor(@Body() authorDto: CreateAuthorDto) {
-  //   return this.authorUseCases.createAuthor(authorDto);
-  // }
+  @Post()
+  createAuthor(@Body() createAuthorDto: CreateAuthorDto) {
+    return this.authorUseCases.createAuthor(createAuthorDto);
+  }
 
   // @Put(':id')
   // updateAuthor(
