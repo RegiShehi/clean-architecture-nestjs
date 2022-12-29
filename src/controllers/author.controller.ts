@@ -1,6 +1,8 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
 import { CreateAuthorDto } from 'src/domain/dtos/author.dto';
 import { AuthorUseCases } from 'src/use-cases/author/author.use-case';
+import { JoiValidationPipe } from 'src/infrastructure/pipes/validation.pipe';
+import { createAuthorSchema } from './validation/create-author-schema';
 
 @Controller('api/author')
 export class AuthorController {
@@ -17,6 +19,7 @@ export class AuthorController {
   }
 
   @Post()
+  @UsePipes(new JoiValidationPipe(createAuthorSchema))
   createAuthor(@Body() createAuthorDto: CreateAuthorDto) {
     return this.authorUseCases.createAuthor(createAuthorDto);
   }
