@@ -21,6 +21,7 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "^3.241.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.2.0",
     "@nestjs/core": "^8.0.0",
@@ -39,7 +40,8 @@
     "rxjs": "^7.2.0",
     "swagger-ui-express": "^4.6.0",
     "typeorm": "^0.3.11",
-    "winston": "^3.8.2"
+    "winston": "^3.8.2",
+    "winston-cloudwatch": "^6.1.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^8.0.0",
