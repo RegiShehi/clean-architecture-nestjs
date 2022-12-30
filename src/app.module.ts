@@ -5,11 +5,13 @@ import { DataServicesModule } from './services/data/data-services.module';
 import { BookController } from './controllers/book.controller';
 import { BookUseCasesModule } from './use-cases/book/book-use-cases.module';
 import { EnvironmentConfigModule } from './services/configuration/environment-config.module';
+import { WinstonLoggerModule } from './infrastructure/logger/winston-logger.module';
 
 @Module({
   imports: [
     EnvironmentConfigModule,
     DataServicesModule,
+    WinstonLoggerModule,
     AuthorUseCasesModule,
     BookUseCasesModule,
   ],
