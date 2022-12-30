@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
 import { TypeOrmGenericRepository } from './typeorm-generic-repository';
-import { IBookRepository } from 'src/domain/abstracts/book-repository.abstract';
 import { BookRepository } from 'src/infrastructure/repositories/book-repository';
+import { IBookRepository } from 'src/domain/abstracts/repositories/book-repository.abstract';
 import Book from './entities/book.entity';
 import Author from './entities/author.entity';
 

@@ -4,7 +4,7 @@ import winston, { format } from 'winston';
 const { combine, timestamp, printf, colorize } = format;
 
 const myFormat = printf(({ message, timestamp, context }) => {
-  return `${timestamp} | ${context} | ${message} `;
+  return `${timestamp} | ${context ?? 'Not defined'} | ${message} `;
 });
 
 export const WinstonLoggerConfig = WinstonModule.createLogger({
