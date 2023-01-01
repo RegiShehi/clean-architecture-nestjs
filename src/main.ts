@@ -3,14 +3,27 @@ import { AppModule } from './app.module';
 import { EnvironmentConfigService } from './services/configuration/environment-config.service';
 
 import { WinstonLoggerConfig } from './infrastructure/logger/winston-logger.config';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  app.setGlobalPrefix('api');
+
+  const config = new DocumentBuilder()
+    .setTitle('Clean architecture API')
+    .setDescription('Clean architecture API description')
+    .setVersion('1.0')
+    .addTag('clean architecture')
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('documentation', app, document, {
+    swaggerOptions: { defaultModelsExpandDepth: -1 },
+  });
 
   const configService = app.get(EnvironmentConfigService);
 
   app.useLogger(WinstonLoggerConfig(configService));
-  // app.useGlobalFilters(new AllExceptionFilter(new WinstonLoggerService()));
 
   await app.listen(configService.getServerPort());
 }

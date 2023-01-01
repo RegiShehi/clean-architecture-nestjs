@@ -1,7 +1,9 @@
 import { Controller, Get } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { BookUseCases } from 'src/use-cases/book/book.use-case';
 
-@Controller('api/book')
+@ApiTags('book')
+@Controller('book')
 export class BookController {
   constructor(private bookUseCases: BookUseCases) {}
 
