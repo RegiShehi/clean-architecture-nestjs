@@ -49,13 +49,13 @@ export class AllExceptionFilter implements ExceptionFilter {
   ) {
     if (status === 500) {
       this.logger.error(
-        `${error.message}`,
+        error.message,
         `End Request for ${request.path} | method=${request.method} | status=${status}`,
         status >= 500 ? exception.stack : '',
       );
     } else {
       this.logger.warn(
-        `${error.message}`,
+        error.message,
         `End Request for ${request.path} | method=${request.method} | status=${status}`,
       );
     }
