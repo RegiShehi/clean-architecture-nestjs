@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { EnvironmentConfigService } from './environment-config.service';
+import { IEnvironmentConfig } from 'src/domain/abstracts/database-config.abstract';
 
 @Module({
   imports: [
@@ -8,7 +9,12 @@ import { EnvironmentConfigService } from './environment-config.service';
       envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
   ],
-  providers: [EnvironmentConfigService],
-  exports: [EnvironmentConfigService],
+  providers: [
+    {
+      provide: IEnvironmentConfig,
+      useClass: EnvironmentConfigService,
+    },
+  ],
+  exports: [IEnvironmentConfig],
 })
 export class EnvironmentConfigModule {}

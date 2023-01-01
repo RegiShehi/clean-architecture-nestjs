@@ -1,9 +1,9 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { EnvironmentConfigService } from './services/configuration/environment-config.service';
 
 import { WinstonLoggerConfig } from './infrastructure/logger/winston-logger.config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { IEnvironmentConfig } from './domain/abstracts/database-config.abstract';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -21,7 +21,7 @@ async function bootstrap() {
     swaggerOptions: { defaultModelsExpandDepth: -1 },
   });
 
-  const configService = app.get(EnvironmentConfigService);
+  const configService = app.get(IEnvironmentConfig);
 
   app.useLogger(WinstonLoggerConfig(configService));
 

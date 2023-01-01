@@ -1,5 +1,5 @@
 import { WinstonModule } from 'nest-winston';
-import { EnvironmentConfigService } from 'src/services/configuration/environment-config.service';
+import { IEnvironmentConfig } from 'src/domain/abstracts/database-config.abstract';
 import winston, { format } from 'winston';
 import CloudWatchTransport from 'winston-cloudwatch';
 
@@ -9,7 +9,7 @@ const myFormat = printf(({ message, timestamp, context }) => {
   return `${timestamp} | ${message} | ${context ?? 'Context not defined'}`;
 });
 
-export const WinstonLoggerConfig = (config: EnvironmentConfigService) => {
+export const WinstonLoggerConfig = (config: IEnvironmentConfig) => {
   const env = process.env.NODE_ENV;
 
   if (env === 'production') {
