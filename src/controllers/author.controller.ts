@@ -16,8 +16,8 @@ export class AuthorController {
 
   @Get()
   async getAll() {
-    this.logger.error('Logging message', AuthorController.name);
-    throw this.exceptions.unauthorizedException();
+    this.logger.error('Logging message');
+    throw this.exceptions.internalServerErrorException();
 
     return this.authorUseCases.getAllAuthors();
   }

@@ -6,7 +6,7 @@ import CloudWatchTransport from 'winston-cloudwatch';
 const { combine, timestamp, printf, colorize } = format;
 
 const myFormat = printf(({ message, timestamp, context }) => {
-  return `${timestamp} | ${context ?? 'Not defined'} | ${message}`;
+  return `${timestamp} | ${message} | ${context ?? 'Not defined'}`;
 });
 
 export const WinstonLoggerConfig = (config: EnvironmentConfigService) => {
@@ -14,7 +14,7 @@ export const WinstonLoggerConfig = (config: EnvironmentConfigService) => {
 
   if (env === 'development') {
     return WinstonModule.createLogger({
-      level: 'error',
+      level: 'info',
       transports: [
         new winston.transports.Console({
           format: combine(colorize({ all: true }), timestamp(), myFormat),
@@ -39,7 +39,7 @@ export const WinstonLoggerConfig = (config: EnvironmentConfigService) => {
             region: config.getAwsRegion(),
           },
           messageFormatter: ({ message, context }) =>
-            `${context ?? 'Not defined'} | ${message}`,
+            `${message} | ${context ?? 'Not defined'}`,
         }),
       ],
     });

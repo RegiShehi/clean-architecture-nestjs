@@ -10,6 +10,7 @@ async function bootstrap() {
   const configService = app.get(EnvironmentConfigService);
 
   app.useLogger(WinstonLoggerConfig(configService));
+  // app.useGlobalFilters(new AllExceptionFilter(new WinstonLoggerService()));
 
   await app.listen(configService.getServerPort());
 }

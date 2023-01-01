@@ -19,12 +19,12 @@ export class EnvironmentConfigService implements IEnvironmentConfig {
   }
   getAwsAccessKey(): string {
     return this.configService.get<string>(
-      AWSCloudWatchConfiguration.AWS_ACCESS_KEY,
+      AWSCloudWatchConfiguration.AWS_ACCESS_KEY_ID,
     );
   }
   getAwsSecretKey(): string {
     return this.configService.get<string>(
-      AWSCloudWatchConfiguration.AWS_KEY_SECRET,
+      AWSCloudWatchConfiguration.AWS_SECRET_ACCESS_KEY,
     );
   }
   getAwsRegion(): string {

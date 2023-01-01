@@ -7,6 +7,8 @@ import { BookUseCasesModule } from './use-cases/book/book-use-cases.module';
 import { EnvironmentConfigModule } from './services/configuration/environment-config.module';
 import { WinstonLoggerModule } from './infrastructure/logger/winston-logger.module';
 import { ExceptionsModule } from './infrastructure/exceptions/exceptions.module';
+import { APP_FILTER } from '@nestjs/core';
+import { AllExceptionFilter } from './infrastructure/exceptions/exception.filter';
 
 @Module({
   imports: [
@@ -18,6 +20,11 @@ import { ExceptionsModule } from './infrastructure/exceptions/exceptions.module'
     BookUseCasesModule,
   ],
   controllers: [AuthorController, BookController],
-  providers: [],
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: AllExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}
