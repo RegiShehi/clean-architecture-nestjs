@@ -4,17 +4,21 @@ import { AuthorUseCases } from 'src/use-cases/author/author.use-case';
 import { JoiValidationPipe } from 'src/infrastructure/pipes/validation.pipe';
 import { createAuthorSchema } from './validation/create-author-schema';
 import { ILogger } from 'src/domain/abstracts/logger-services.abstract';
+import { IException } from 'src/domain/abstracts/exception-services.abstract';
 
 @Controller('api/author')
 export class AuthorController {
   constructor(
     private authorUseCases: AuthorUseCases,
     private readonly logger: ILogger,
+    private readonly exceptions: IException,
   ) {}
 
   @Get()
   async getAll() {
     this.logger.error('Logging message', AuthorController.name);
+    throw this.exceptions.unauthorizedException();
+
     return this.authorUseCases.getAllAuthors();
   }
 
