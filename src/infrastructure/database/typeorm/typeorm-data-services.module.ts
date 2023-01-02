@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
 import { TypeOrmDataServices } from './typeorm-data-services.service';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { EnvironmentConfigModule } from 'src/services/configuration/environment-config.module';
 import Author from './entities/author.entity';
 import Book from './entities/book.entity';
-import { IEnvironmentConfig } from 'src/domain/abstracts/database-config.abstract';
+import { DatabaseConfigModule } from 'src/services/configuration/database/database-config.module';
+import { IDataBaseConfig } from 'src/domain/abstracts/config/database-config.abstract';
 
 export const getTypeOrmModuleOptions = (
-  config: IEnvironmentConfig,
+  config: IDataBaseConfig,
 ): TypeOrmModuleOptions =>
   ({
     type: 'postgres',
@@ -26,8 +26,8 @@ export const getTypeOrmModuleOptions = (
   imports: [
     TypeOrmModule.forFeature([Author, Book]),
     TypeOrmModule.forRootAsync({
-      imports: [EnvironmentConfigModule],
-      inject: [IEnvironmentConfig],
+      imports: [DatabaseConfigModule],
+      inject: [IDataBaseConfig],
       useFactory: getTypeOrmModuleOptions,
     }),
   ],

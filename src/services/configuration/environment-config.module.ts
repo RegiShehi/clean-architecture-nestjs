@@ -1,20 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import { EnvironmentConfigService } from './environment-config.service';
-import { IEnvironmentConfig } from 'src/domain/abstracts/database-config.abstract';
+import { AWSConfigModule } from './aws/aws-config.module';
+import { DatabaseConfigModule } from './database/database-config.module';
 
 @Module({
-  imports: [
-    ConfigModule.forRoot({
-      envFilePath: `.env.${process.env.NODE_ENV}`,
-    }),
-  ],
-  providers: [
-    {
-      provide: IEnvironmentConfig,
-      useClass: EnvironmentConfigService,
-    },
-  ],
-  exports: [IEnvironmentConfig],
+  imports: [AWSConfigModule, DatabaseConfigModule],
+  exports: [AWSConfigModule, DatabaseConfigModule],
 })
 export class EnvironmentConfigModule {}
