@@ -3,8 +3,7 @@ import { AppModule } from './app.module';
 
 import { WinstonLoggerConfig } from './infrastructure/logger/winston-logger.config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import { IAWSConfig } from './domain/abstracts/config/aws-config.abstract';
-import { IDataBaseConfig } from './domain/abstracts/config/database-config.abstract';
+import { IEnvironmentConfig } from './domain/abstracts/config/environment-config.abstract';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -25,11 +24,10 @@ async function bootstrap() {
     });
   }
 
-  const loggerService = app.get(IAWSConfig);
-  const dbService = app.get(IDataBaseConfig);
+  const configService = app.get(IEnvironmentConfig);
 
-  app.useLogger(WinstonLoggerConfig(loggerService));
+  app.useLogger(WinstonLoggerConfig(configService.logger));
 
-  await app.listen(dbService.getServerPort());
+  await app.listen(configService.getServerPort());
 }
 bootstrap();

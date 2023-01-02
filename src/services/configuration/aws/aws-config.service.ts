@@ -2,16 +2,10 @@ import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { AWSCloudWatchConfiguration } from 'src/configuration';
 import { IAWSConfig } from 'src/domain/abstracts/config/aws-config.abstract';
-import { CommonConfigService } from '../common/common-config.service';
 
 @Injectable()
-export class AWSConfigService
-  extends CommonConfigService
-  implements IAWSConfig
-{
-  constructor(public configService: ConfigService) {
-    super(configService);
-  }
+export class AWSConfigService implements IAWSConfig {
+  constructor(public configService: ConfigService) {}
 
   getCloudWatchGroupName(): string {
     return this.configService.get<string>(

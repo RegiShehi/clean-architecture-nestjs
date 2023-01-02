@@ -11,4 +11,4 @@ import { ILogger } from 'src/domain/abstracts/logger-services.abstract';
   ],
   exports: [ILogger],
 })
-export class WinstonLoggerModule {}
+export class LoggerModule {}
