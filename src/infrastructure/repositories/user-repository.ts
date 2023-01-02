@@ -3,8 +3,8 @@ import {
   typeReturn,
 } from '../database/typeorm/typeorm-generic-repository';
 import { IUserRepository } from 'src/domain/abstracts/repositories/user-repository.abstract';
+import { UserModel } from 'src/domain/models/user.model';
 import User from '../database/typeorm/entities/user.entity';
-import { User as UserModel } from 'src/domain/models/user.model';
 
 export class UserRepository
   extends TypeOrmGenericRepository<User>

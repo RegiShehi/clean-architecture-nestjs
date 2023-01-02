@@ -1,4 +1,4 @@
-export class Author {
+export class AuthorModel {
   firstName: string;
   lastName: string;
 }

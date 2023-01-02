@@ -1,21 +1,21 @@
 import { Injectable } from '@nestjs/common';
-import { Author } from 'src/domain/models/author.model';
 import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
 import { CreateAuthorDto } from 'src/domain/dtos/author.dto';
+import { AuthorModel } from 'src/domain/models/author.model';
 
 @Injectable()
 export class AuthorUseCases {
   constructor(private dataServices: IDataServices) {}
 
-  async getAllAuthors(): Promise<Author[]> {
+  async getAllAuthors(): Promise<AuthorModel[]> {
     return await this.dataServices.authors.getAll();
   }
 
-  async getAuthorById(id: number): Promise<Author> {
+  async getAuthorById(id: number): Promise<AuthorModel> {
     return await this.dataServices.authors.get(id);
   }
 
-  async createAuthor(createAuthorDto: CreateAuthorDto): Promise<Author> {
+  async createAuthor(createAuthorDto: CreateAuthorDto): Promise<AuthorModel> {
     return await this.dataServices.authors.create(createAuthorDto);
   }
 }
