@@ -3,25 +3,22 @@ import {
   typeReturn,
 } from '../database/typeorm/typeorm-generic-repository';
 import { IUserRepository } from 'src/domain/abstracts/repositories/user-repository.abstract';
-import { UserModel } from 'src/domain/models/user.model';
-import User from '../database/typeorm/entities/user.entity';
+import { User } from 'src/domain/models/user.model';
+import { UserEntity } from '../database/typeorm/entities/user.entity';
 
 export class UserRepository
-  extends TypeOrmGenericRepository<User>
+  extends TypeOrmGenericRepository<UserEntity>
   implements IUserRepository
 {
-  async getAllUsers(): Promise<UserModel[]> {
+  async getAllUsers(): Promise<User[]> {
     return await this.getAll();
   }
 
-  async findByEmail(email: string): Promise<UserModel> {
+  async findByEmail(email: string): Promise<User> {
     return await this.repository.findOneBy({ email });
   }
 
-  async saveRefreshToken(
-    refreshToken: string,
-    email: string,
-  ): Promise<UserModel> {
+  async saveRefreshToken(refreshToken: string, email: string): Promise<User> {
     return await typeReturn<User>(
       this.repository.update(email, {
         refreshToken,
@@ -35,7 +32,7 @@ export class UserRepository
     throw new Error('Method not implemented.');
   }
 
-  async removeRefreshToken(email: string): Promise<UserModel> {
+  async removeRefreshToken(email: string): Promise<User> {
     return await typeReturn<User>(
       this.repository.update(email, {
         refreshToken: null,

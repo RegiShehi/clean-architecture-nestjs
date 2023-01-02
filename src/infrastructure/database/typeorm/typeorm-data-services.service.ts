@@ -7,31 +7,33 @@ import { BookRepository } from 'src/infrastructure/repositories/book-repository'
 import { IBookRepository } from 'src/domain/abstracts/repositories/book-repository.abstract';
 import { UserRepository } from 'src/infrastructure/repositories/user-repository';
 
-import Book from './entities/book.entity';
-import Author from './entities/author.entity';
-import User from './entities/user.entity';
 import { IUserRepository } from 'src/domain/abstracts/repositories/user-repository.abstract';
 import { IGenericRepository } from 'src/domain/abstracts/repositories/generic-repository.abstract';
+import { AuthorEntity } from './entities/author.entity';
+import { BookEntity } from './entities/book.entity';
+import { UserEntity } from './entities/user.entity';
 
 @Injectable()
 export class TypeOrmDataServices
   implements IDataServices, OnApplicationBootstrap
 {
-  authors: IGenericRepository<Author>;
+  authors: IGenericRepository<AuthorEntity>;
   books: IBookRepository;
   users: IUserRepository;
 
   constructor(
-    @InjectRepository(Author)
-    private authorsRepository: Repository<Author>,
-    @InjectRepository(Book)
-    private booksRepository: Repository<Book>,
-    @InjectRepository(User)
-    private usersRepository: Repository<User>,
+    @InjectRepository(AuthorEntity)
+    private authorsRepository: Repository<AuthorEntity>,
+    @InjectRepository(BookEntity)
+    private booksRepository: Repository<BookEntity>,
+    @InjectRepository(UserEntity)
+    private usersRepository: Repository<UserEntity>,
   ) {}
 
   onApplicationBootstrap() {
-    this.authors = new TypeOrmGenericRepository<Author>(this.authorsRepository);
+    this.authors = new TypeOrmGenericRepository<AuthorEntity>(
+      this.authorsRepository,
+    );
     this.books = new BookRepository(this.booksRepository);
     this.users = new UserRepository(this.usersRepository);
   }

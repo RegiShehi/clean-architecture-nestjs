@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
-class Author {
+@Entity('authors')
+class AuthorEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -12,4 +12,4 @@ class Author {
   public lastName: string;
 }
 
-export default Author;
+export { AuthorEntity };

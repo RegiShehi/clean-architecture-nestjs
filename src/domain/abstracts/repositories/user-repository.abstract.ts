@@ -1,15 +1,12 @@
-import { UserModel } from 'src/domain/models/user.model';
+import { User } from 'src/domain/models/user.model';
 import { IGenericRepository } from './generic-repository.abstract';
 
-export abstract class IUserRepository extends IGenericRepository<UserModel> {
-  abstract findByEmail(email: string): Promise<UserModel>;
-  abstract saveRefreshToken(
-    refreshToken: string,
-    email: string,
-  ): Promise<UserModel>;
+export abstract class IUserRepository extends IGenericRepository<User> {
+  abstract findByEmail(email: string): Promise<User>;
+  abstract saveRefreshToken(refreshToken: string, email: string): Promise<User>;
   abstract getUserIfRefreshTokenMatches(
     refreshToken: string,
     email: string,
-  ): Promise<UserModel>;
-  abstract removeRefreshToken(email: string): Promise<UserModel>;
+  ): Promise<User>;
+  abstract removeRefreshToken(email: string): Promise<User>;
 }

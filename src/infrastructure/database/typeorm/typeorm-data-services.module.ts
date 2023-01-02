@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
 import { TypeOrmDataServices } from './typeorm-data-services.service';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import Author from './entities/author.entity';
-import Book from './entities/book.entity';
 import { DatabaseConfigModule } from 'src/services/configuration/database/database-config.module';
 import { IDataBaseConfig } from 'src/domain/abstracts/config/database-config.abstract';
-import User from './entities/user.entity';
+import { BookEntity } from './entities/book.entity';
+import { UserEntity } from './entities/user.entity';
+import { AuthorEntity } from './entities/author.entity';
 
 export const getTypeOrmModuleOptions = (
   config: IDataBaseConfig,
@@ -25,7 +25,7 @@ export const getTypeOrmModuleOptions = (
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Author, Book, User]),
+    TypeOrmModule.forFeature([AuthorEntity, BookEntity, UserEntity]),
     TypeOrmModule.forRootAsync({
       imports: [DatabaseConfigModule],
       inject: [IDataBaseConfig],

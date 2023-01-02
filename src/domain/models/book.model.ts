@@ -1,3 +1,3 @@
-export class BookModel {
+export class Book {
   title: string;
 }

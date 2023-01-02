@@ -1,7 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
-class Book {
+@Entity('books')
+class BookEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 
@@ -9,4 +9,4 @@ class Book {
   public title: string;
 }
 
-export default Book;
+export { BookEntity };
