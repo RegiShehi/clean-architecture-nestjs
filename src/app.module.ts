@@ -11,6 +11,8 @@ import { AllExceptionFilter } from './infrastructure/exceptions/exception.filter
 import { EnvironmentConfigModule } from './services/configuration/common/environment-config.module';
 import { UserUseCasesModule } from './use-cases/user/user-use-cases.module';
 import { UserController } from './controllers/user.controller';
+import { BcryptModule } from './services/auth/bcrypt/bcrypt.module';
+import { JwtServiceModule } from './services/auth/jwt/jwt.module';
 
 @Module({
   imports: [
@@ -18,6 +20,8 @@ import { UserController } from './controllers/user.controller';
     DataServicesModule,
     ExceptionsModule,
     LoggerModule,
+    BcryptModule,
+    JwtServiceModule,
     UserUseCasesModule,
     AuthorUseCasesModule,
     BookUseCasesModule,

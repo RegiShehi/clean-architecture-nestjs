@@ -10,10 +10,6 @@ export class UserRepository
   extends TypeOrmGenericRepository<UserEntity>
   implements IUserRepository
 {
-  async getAllUsers(): Promise<User[]> {
-    return await this.getAll();
-  }
-
   async findByEmail(email: string): Promise<User> {
     return await this.repository.findOneBy({ email });
   }
