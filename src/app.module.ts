@@ -9,6 +9,7 @@ import { ExceptionsModule } from './infrastructure/exceptions/exceptions.module'
 import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionFilter } from './infrastructure/exceptions/exception.filter';
 import { EnvironmentConfigModule } from './services/configuration/common/environment-config.module';
+import { UserUseCasesModule } from './use-cases/user/user-use-cases.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { EnvironmentConfigModule } from './services/configuration/common/environ
     DataServicesModule,
     ExceptionsModule,
     LoggerModule,
+    UserUseCasesModule,
     AuthorUseCasesModule,
     BookUseCasesModule,
   ],

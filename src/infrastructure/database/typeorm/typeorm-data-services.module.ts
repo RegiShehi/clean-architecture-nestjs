@@ -6,6 +6,7 @@ import Author from './entities/author.entity';
 import Book from './entities/book.entity';
 import { DatabaseConfigModule } from 'src/services/configuration/database/database-config.module';
 import { IDataBaseConfig } from 'src/domain/abstracts/config/database-config.abstract';
+import User from './entities/user.entity';
 
 export const getTypeOrmModuleOptions = (
   config: IDataBaseConfig,
@@ -24,7 +25,7 @@ export const getTypeOrmModuleOptions = (
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Author, Book]),
+    TypeOrmModule.forFeature([Author, Book, User]),
     TypeOrmModule.forRootAsync({
       imports: [DatabaseConfigModule],
       inject: [IDataBaseConfig],
