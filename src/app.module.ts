@@ -10,6 +10,7 @@ import { APP_FILTER } from '@nestjs/core';
 import { AllExceptionFilter } from './infrastructure/exceptions/exception.filter';
 import { EnvironmentConfigModule } from './services/configuration/common/environment-config.module';
 import { UserUseCasesModule } from './use-cases/user/user-use-cases.module';
+import { UserController } from './controllers/user.controller';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { UserUseCasesModule } from './use-cases/user/user-use-cases.module';
     AuthorUseCasesModule,
     BookUseCasesModule,
   ],
-  controllers: [AuthorController, BookController],
+  controllers: [AuthorController, BookController, UserController],
   providers: [
     {
       provide: APP_FILTER,

@@ -16,8 +16,6 @@ export class AuthorController {
 
   @Get()
   async getAll() {
-    // throw this.exceptions.internalServerErrorException('Testing error');
-
     return this.authorUseCases.getAllAuthors();
   }
 
