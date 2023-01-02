@@ -4,6 +4,7 @@ import { AWSConfigModule } from '../aws/aws-config.module';
 import { DatabaseConfigModule } from '../database/database-config.module';
 import { IEnvironmentConfig } from 'src/domain/abstracts/config/environment-config.abstract';
 import { EnvironmentConfigService } from './environment-config.service';
+import { JWTConfigModule } from '../jwt/jwt-config.module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { EnvironmentConfigService } from './environment-config.service';
     }),
     AWSConfigModule,
     DatabaseConfigModule,
+    JWTConfigModule,
   ],
   providers: [
     {
