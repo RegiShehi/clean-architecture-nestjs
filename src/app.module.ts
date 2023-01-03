@@ -13,6 +13,8 @@ import { UserUseCasesModule } from './use-cases/user/user-use-cases.module';
 import { UserController } from './controllers/user.controller';
 import { BcryptModule } from './services/auth/bcrypt/bcrypt.module';
 import { JwtServiceModule } from './services/auth/jwt/jwt.module';
+import { AuthUseCasesModule } from './use-cases/auth/auth-use-cases.module';
+import { AuthController } from './controllers/auth.controller';
 
 @Module({
   imports: [
@@ -22,11 +24,17 @@ import { JwtServiceModule } from './services/auth/jwt/jwt.module';
     LoggerModule,
     BcryptModule,
     JwtServiceModule,
+    AuthUseCasesModule,
     UserUseCasesModule,
     AuthorUseCasesModule,
     BookUseCasesModule,
   ],
-  controllers: [AuthorController, BookController, UserController],
+  controllers: [
+    AuthorController,
+    BookController,
+    UserController,
+    AuthController,
+  ],
   providers: [
     {
       provide: APP_FILTER,
