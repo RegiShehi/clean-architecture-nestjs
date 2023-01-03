@@ -1,6 +1,4 @@
-export class Token {
-  jwtToken: string;
+export class Cookie {
   cookieWithJwtToken: string;
-  refreshToken: string;
   cookieWithRefreshToken: string;
 }

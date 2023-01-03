@@ -5,7 +5,7 @@ import { IJWTConfig } from 'src/domain/abstracts/config/jwt-config.abstract';
 import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
 import { IException } from 'src/domain/abstracts/exception-services.abstract';
 import { LoginUserDto, RegisterUserDto } from 'src/domain/dtos/user.dto';
-import { Token } from 'src/domain/models/token.model';
+import { Cookie } from 'src/domain/models/cookie.model';
 import { User } from 'src/domain/models/user.model';
 
 @Injectable()
@@ -38,64 +38,49 @@ export class AuthUseCases {
     return createdUser;
   }
 
-  async login(loginData: LoginUserDto): Promise<Token> {
+  async login(loginData: LoginUserDto): Promise<Cookie> {
     const { email, password } = loginData;
 
     const user = await this.getCurrentUser(email, password);
 
-    const { jwtToken, cookieWithJwtToken } = await this.getCookieWithJwtToken({
+    const cookieWithJwtToken = await this.generateCookieWithJwtToken({
       email: user.email,
     });
 
-    const { refreshToken, cookieWithRefreshToken } =
-      await this.getCookieWithJwtRefreshToken({ email: user.email });
+    const cookieWithRefreshToken = await this.generateCookieWithJwtRefreshToken(
+      {
+        email: user.email,
+      },
+    );
 
     return {
       cookieWithJwtToken,
       cookieWithRefreshToken,
-      jwtToken,
-      refreshToken,
     };
   }
 
-  private async getCookieWithJwtToken(payload: IJwtPayload) {
-    const jwtToken = await this.generateJwtToken(payload);
-
+  private async generateCookieWithJwtToken(payload: IJwtPayload) {
     const maxAge = this.config.getJWTExpirationTime();
 
-    const cookieWithJwtToken = `Authorization=${jwtToken}; HttpOnly; Path=/; Max-Age=${maxAge}`;
-
-    return { jwtToken, cookieWithJwtToken };
-  }
-
-  private async getCookieWithJwtRefreshToken(payload: IJwtPayload) {
-    const refreshToken = await this.generateJwtRefreshToken(payload);
-
-    const maxAge = this.config.getJWTRefreshTokenExpirationTime();
-
-    const cookieWithRefreshToken = `Refresh=${refreshToken}; HttpOnly; Path=/; Max-Age=${maxAge}`;
-
-    return { refreshToken, cookieWithRefreshToken };
-  }
-
-  private async generateJwtToken(payload: IJwtPayload) {
-    const token = await this.jwt.createToken(
+    const jwtToken = await this.jwt.createToken(
       payload,
       this.config.getJWTSecret(),
-      this.config.getJWTExpirationTime(),
+      maxAge,
     );
 
-    return token;
+    return `Authorization=${jwtToken}; HttpOnly; Path=/; Max-Age=${maxAge}`;
   }
 
-  private async generateJwtRefreshToken(payload: IJwtPayload) {
-    const token = this.jwt.createToken(
+  private async generateCookieWithJwtRefreshToken(payload: IJwtPayload) {
+    const maxAge = this.config.getJWTRefreshTokenExpirationTime();
+
+    const refreshToken = await this.jwt.createToken(
       payload,
       this.config.getJWTRefreshTokenSecret(),
-      this.config.getJWTRefreshTokenExpirationTime(),
+      maxAge,
     );
 
-    return token;
+    return `Refresh=${refreshToken}; HttpOnly; Path=/; Max-Age=${maxAge}`;
   }
 
   private async getCurrentUser(
