@@ -43,4 +43,16 @@ export class AuthController {
       result.cookieWithRefreshToken,
     ]);
   }
+
+  // @Post('logout')
+  // @HttpCode(200)
+  // async logout(
+  //   @User() user: UserEntity,
+  //   @Res({ passthrough: true }) response: Response,
+  // ) {
+  //   await this.userService.removeRefreshToken(user.email);
+  //   const cookies = await this.authService.removeCookies();
+
+  //   response.setHeader('Set-Cookie', cookies);
+  // }
 }

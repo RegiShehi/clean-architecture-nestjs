@@ -22,13 +22,6 @@ export class UserRepository
     );
   }
 
-  async getUserIfRefreshTokenMatches(
-    refreshToken: string,
-    email: string,
-  ): Promise<User> {
-    throw new Error('Method not implemented.');
-  }
-
   async removeRefreshToken(email: string): Promise<User> {
     return await typeReturn<User>(
       this.repository.update(email, {

@@ -5,6 +5,8 @@ import { ExceptionsModule } from 'src/infrastructure/exceptions/exceptions.modul
 import { BcryptModule } from 'src/services/auth/bcrypt/bcrypt.module';
 import { JWTConfigModule } from 'src/services/configuration/jwt/jwt-config.module';
 import { JwtServiceModule } from 'src/services/auth/jwt/jwt.module';
+import { JwtStrategy } from 'src/services/auth/strategies/jwt.strategy';
+import { JwtRefreshTokenStrategy } from 'src/services/auth/strategies/jwt-refresh-token.strategy';
 
 @Module({
   imports: [
@@ -14,7 +16,7 @@ import { JwtServiceModule } from 'src/services/auth/jwt/jwt.module';
     JWTConfigModule,
     JwtServiceModule,
   ],
-  providers: [AuthUseCases],
+  providers: [AuthUseCases, JwtStrategy, JwtRefreshTokenStrategy],
   exports: [AuthUseCases],
 })
 export class AuthUseCasesModule {}
