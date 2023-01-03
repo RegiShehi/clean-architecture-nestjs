@@ -36,12 +36,11 @@ export class AuthController {
     @Body() loginData: LoginUserDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    // const { cookieWithJwtToken, refreshToken, cookieWithRefreshToken } =
-    //   await this.authService.login(loginData);
-    // await this.userUseCases.saveRefreshToken(refreshToken, loginData.email);
-    // response.setHeader('Set-Cookie', [
-    //   cookieWithJwtToken,
-    //   cookieWithRefreshToken,
-    // ]);
+    const result = await this.authUseCases.login(loginData);
+
+    response.setHeader('Set-Cookie', [
+      result.cookieWithJwtToken,
+      result.cookieWithRefreshToken,
+    ]);
   }
 }

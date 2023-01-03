@@ -8,5 +8,5 @@ export abstract class IJwt {
     payload: IJwtPayload,
     secret: string,
     expiresIn: string,
-  ): string;
+  ): Promise<string>;
 }

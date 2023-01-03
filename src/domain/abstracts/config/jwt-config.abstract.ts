@@ -1,6 +1,6 @@
 export abstract class IJWTConfig {
   abstract getJWTSecret(): string;
-  abstract getJWTExpirationTime(): number;
+  abstract getJWTExpirationTime(): string;
   abstract getJWTRefreshTokenSecret(): string;
-  abstract getJWTRefreshTokenExpirationTime(): number;
+  abstract getJWTRefreshTokenExpirationTime(): string;
 }

@@ -11,8 +11,8 @@ export class JWTConfigService implements IJWTConfig {
     return this.configService.get<string>(JWTConfiguration.JWT_SECRET);
   }
 
-  getJWTExpirationTime(): number {
-    return this.configService.get<number>(JWTConfiguration.JWT_EXPIRATION_TIME);
+  getJWTExpirationTime(): string {
+    return this.configService.get<string>(JWTConfiguration.JWT_EXPIRATION_TIME);
   }
 
   getJWTRefreshTokenSecret(): string {
@@ -21,8 +21,8 @@ export class JWTConfigService implements IJWTConfig {
     );
   }
 
-  getJWTRefreshTokenExpirationTime(): number {
-    return this.configService.get<number>(
+  getJWTRefreshTokenExpirationTime(): string {
+    return this.configService.get<string>(
       JWTConfiguration.JWT_REFRESH_TOKEN_EXPIRATION_TIME,
     );
   }
