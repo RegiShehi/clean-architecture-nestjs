@@ -53,11 +53,12 @@ export class AuthUseCases {
       email,
     });
 
-    const cookieWithRefreshToken = await this.generateCookieWithJwtRefreshToken(
-      {
+    const { cookieWithRefreshToken, refreshToken } =
+      await this.generateCookieWithJwtRefreshToken({
         email,
-      },
-    );
+      });
+
+    await this.dataServices.users.saveRefreshToken(refreshToken, email);
 
     return {
       cookieWithJwtToken,
@@ -95,7 +96,10 @@ export class AuthUseCases {
       maxAge,
     );
 
-    return `Refresh=${refreshToken}; HttpOnly; Path=/; Max-Age=${maxAge}`;
+    return {
+      cookieWithRefreshToken: `Refresh=${refreshToken}; HttpOnly; Path=/; Max-Age=${maxAge}`,
+      refreshToken,
+    };
   }
 
   private async verifyPassword(

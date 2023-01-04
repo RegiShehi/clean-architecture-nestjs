@@ -1,4 +1,4 @@
 export abstract class IBcrypt {
   abstract hash(hashString: string): Promise<string>;
-  abstract compare(password: string, hashPassword: string): Promise<boolean>;
+  abstract compare(data: string, hashedData: string): Promise<boolean>;
 }

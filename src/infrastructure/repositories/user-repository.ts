@@ -16,17 +16,23 @@ export class UserRepository
 
   async saveRefreshToken(refreshToken: string, email: string): Promise<User> {
     return await typeReturn<User>(
-      this.repository.update(email, {
-        refreshToken,
-      }),
+      this.repository.update(
+        { email },
+        {
+          refreshToken,
+        },
+      ),
     );
   }
 
   async removeRefreshToken(email: string): Promise<User> {
     return await typeReturn<User>(
-      this.repository.update(email, {
-        refreshToken: null,
-      }),
+      this.repository.update(
+        { email },
+        {
+          refreshToken: null,
+        },
+      ),
     );
   }
 }
