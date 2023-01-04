@@ -4,6 +4,7 @@ import {
   HttpCode,
   Post,
   Res,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
@@ -14,6 +15,9 @@ import { JoiValidationPipe } from 'src/infrastructure/pipes/validation.pipe';
 import { Response } from 'express';
 import loginUserSchema from './validation/login-user-schema';
 import { UserUseCases } from 'src/use-cases/user/user.use-case';
+import { JwtAuthGuard } from 'src/infrastructure/guards/jwt-auth.guard';
+import { UserDecorator } from 'src/infrastructure/decorators/user.decorator';
+import { User } from 'src/domain/models/user.model';
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -44,15 +48,15 @@ export class AuthController {
     ]);
   }
 
-  // @Post('logout')
-  // @HttpCode(200)
-  // async logout(
-  //   @User() user: UserEntity,
-  //   @Res({ passthrough: true }) response: Response,
-  // ) {
-  //   await this.userService.removeRefreshToken(user.email);
-  //   const cookies = await this.authService.removeCookies();
+  @Post('logout')
+  @HttpCode(200)
+  @UseGuards(JwtAuthGuard)
+  async logout(
+    @UserDecorator() user: User,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const cookies = await this.authUseCases.logout(user.email);
 
-  //   response.setHeader('Set-Cookie', cookies);
-  // }
+    response.setHeader('Set-Cookie', cookies);
+  }
 }

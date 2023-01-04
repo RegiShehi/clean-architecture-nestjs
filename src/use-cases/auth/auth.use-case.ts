@@ -59,6 +59,15 @@ export class AuthUseCases {
     };
   }
 
+  public async logout(email: string) {
+    await this.dataServices.users.removeRefreshToken(email);
+
+    return [
+      'Authorization=; HttpOnly; Path=/; Max-Age=0',
+      'Refresh=; HttpOnly; Path=/; Max-Age=0',
+    ];
+  }
+
   private async generateCookieWithJwtToken(payload: IJwtPayload) {
     const maxAge = this.config.getJWTExpirationTime();
 
@@ -86,7 +95,7 @@ export class AuthUseCases {
   private async getCurrentUser(
     email: string,
     plainTextPassword: string,
-  ): Promise<User | null> {
+  ): Promise<User> {
     const user = await this.dataServices.users.findByEmail(email);
 
     if (!user) {
