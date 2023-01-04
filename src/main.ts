@@ -6,11 +6,13 @@ import { IEnvironmentConfig } from './domain/abstracts/config/environment-config
 import { LoggingInterceptor } from './infrastructure/interceptors/logger.interceptor';
 import { LoggerService } from './infrastructure/logger/logger.service';
 import { WinstonLoggerConfig } from './infrastructure/logger/logger.config';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const env = process.env.NODE_ENV;
   app.setGlobalPrefix('api');
+  app.use(cookieParser());
 
   if (env !== 'production') {
     const config = new DocumentBuilder()

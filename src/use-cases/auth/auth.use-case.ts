@@ -68,7 +68,7 @@ export class AuthUseCases {
     ];
   }
 
-  private async generateCookieWithJwtToken(payload: IJwtPayload) {
+  public async generateCookieWithJwtToken(payload: IJwtPayload) {
     const maxAge = this.config.getJWTExpirationTime();
 
     const jwtToken = await this.jwt.createToken(

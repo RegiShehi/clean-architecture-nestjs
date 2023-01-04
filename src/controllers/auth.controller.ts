@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   Post,
   Res,
@@ -17,7 +18,8 @@ import loginUserSchema from './validation/login-user-schema';
 import { UserUseCases } from 'src/use-cases/user/user.use-case';
 import { JwtAuthGuard } from 'src/infrastructure/guards/jwt-auth.guard';
 import { UserDecorator } from 'src/infrastructure/decorators/user.decorator';
-import { User } from 'src/domain/models/user.model';
+// import { User } from 'src/domain/models/user.model';
+import JwtRefreshGuard from 'src/infrastructure/guards/jwt-refresh.guard';
 
 @ApiTags('authentication')
 @Controller('auth')
@@ -52,11 +54,29 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   async logout(
-    @UserDecorator() user: User,
+    @UserDecorator() user: any,
     @Res({ passthrough: true }) response: Response,
   ) {
     const cookies = await this.authUseCases.logout(user.email);
 
     response.setHeader('Set-Cookie', cookies);
+  }
+
+  @UseGuards(JwtRefreshGuard)
+  @Get('refresh')
+  async refresh(
+    @UserDecorator() user: any,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const cookieWithJwtToken =
+      await this.authUseCases.generateCookieWithJwtToken({ email: user.email });
+
+    response.setHeader('Set-Cookie', cookieWithJwtToken);
+  }
+
+  @Get('profile')
+  @UseGuards(JwtAuthGuard)
+  getProfile(@UserDecorator() user: any) {
+    return user;
   }
 }
