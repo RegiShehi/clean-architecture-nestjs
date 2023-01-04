@@ -9,11 +9,11 @@ export class JwtTokenService implements IJwt {
   createToken(
     payload: IJwtPayload,
     secret: string,
-    expiresIn: string,
+    expiresIn: number,
   ): Promise<string> {
     return this.jwtService.signAsync(payload, {
-      secret: secret,
-      expiresIn: expiresIn,
+      secret,
+      expiresIn,
     });
   }
 }

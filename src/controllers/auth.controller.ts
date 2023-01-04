@@ -57,8 +57,6 @@ export class AuthController {
     @UserDecorator() user: any,
     @Res({ passthrough: true }) response: Response,
   ) {
-    console.log(user);
-
     const cookies = await this.authUseCases.logout(user.email);
 
     response.setHeader('Set-Cookie', cookies);

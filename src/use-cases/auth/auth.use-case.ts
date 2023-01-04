@@ -41,15 +41,21 @@ export class AuthUseCases {
   async login(loginData: LoginUserDto): Promise<Cookie> {
     const { email, password } = loginData;
 
-    const user = await this.getCurrentUser(email, password);
+    const user = await this.dataServices.users.findByEmail(email);
+
+    if (!user) {
+      throw this.exception.badRequestException('Wrong credentials provided');
+    }
+
+    await this.verifyPassword(password, user.password);
 
     const cookieWithJwtToken = await this.generateCookieWithJwtToken({
-      email: user.email,
+      email,
     });
 
     const cookieWithRefreshToken = await this.generateCookieWithJwtRefreshToken(
       {
-        email: user.email,
+        email,
       },
     );
 
@@ -90,21 +96,6 @@ export class AuthUseCases {
     );
 
     return `Refresh=${refreshToken}; HttpOnly; Path=/; Max-Age=${maxAge}`;
-  }
-
-  private async getCurrentUser(
-    email: string,
-    plainTextPassword: string,
-  ): Promise<User> {
-    const user = await this.dataServices.users.findByEmail(email);
-
-    if (!user) {
-      throw this.exception.badRequestException('Wrong credentials provided');
-    }
-
-    await this.verifyPassword(plainTextPassword, user.password);
-
-    return user;
   }
 
   private async verifyPassword(

@@ -6,6 +6,6 @@ export abstract class IJwt {
   abstract createToken(
     payload: IJwtPayload,
     secret: string,
-    expiresIn: string,
+    expiresIn: number,
   ): Promise<string>;
 }
