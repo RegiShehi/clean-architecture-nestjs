@@ -58,7 +58,9 @@ export class AuthUseCases {
         email,
       });
 
-    await this.dataServices.users.saveRefreshToken(refreshToken, email);
+    const hashedRefreshToken = await this.bcrypt.hash(refreshToken);
+
+    await this.dataServices.users.saveRefreshToken(hashedRefreshToken, email);
 
     return {
       cookieWithJwtToken,

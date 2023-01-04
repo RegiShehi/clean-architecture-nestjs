@@ -11,23 +11,4 @@ export class UserController {
   async getAll() {
     return this.userUsecases.getAllUsers();
   }
-
-  // @Get(':id')
-  // async getById(@Param('id') id: number) {
-  //   return this.authorUseCases.getAuthorById(id);
-  // }
-
-  // @Post()
-  // @UsePipes(new JoiValidationPipe(createAuthorSchema))
-  // createAuthor(@Body() createAuthorDto: CreateAuthorDto) {
-  //   return this.authorUseCases.createAuthor(createAuthorDto);
-  // }
-
-  // @Put(':id')
-  // updateAuthor(
-  //   @Param('id') authorId: string,
-  //   @Body() updateAuthorDto: UpdateAuthorDto,
-  // ) {
-  //   return this.authorUseCases.updateAuthor(authorId, updateAuthorDto);
-  // }
 }
