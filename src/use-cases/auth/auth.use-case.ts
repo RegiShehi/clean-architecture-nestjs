@@ -24,7 +24,7 @@ export class AuthUseCases {
     );
 
     if (user)
-      throw new this.exception.badRequestException(
+      throw this.exception.badRequestException(
         `User with email ${registerUserData.email} already exists`,
       );
 
@@ -99,9 +99,7 @@ export class AuthUseCases {
     const user = await this.dataServices.users.findByEmail(email);
 
     if (!user) {
-      throw new this.exception.badRequestException(
-        'Wrong credentials provided',
-      );
+      throw this.exception.badRequestException('Wrong credentials provided');
     }
 
     await this.verifyPassword(plainTextPassword, user.password);
@@ -119,9 +117,7 @@ export class AuthUseCases {
     );
 
     if (!isPasswordMatching) {
-      throw new this.exception.badRequestException(
-        'Wrong credentials provided',
-      );
+      throw this.exception.badRequestException('Wrong credentials provided');
     }
   }
 }

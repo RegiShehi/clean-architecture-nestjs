@@ -45,9 +45,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(
     );
 
     if (!isRefreshTokenMatching) {
-      throw new this.exception.badRequestException(
-        'Wrong credentials provided',
-      );
+      throw this.exception.badRequestException('Wrong credentials provided');
     }
 
     return user;
