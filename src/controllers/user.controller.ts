@@ -2,8 +2,8 @@ import { Controller, Get } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserUseCases } from 'src/use-cases/user/user.use-case';
 
-@ApiTags('user')
-@Controller('user')
+@ApiTags('users')
+@Controller('users')
 export class UserController {
   constructor(private userUsecases: UserUseCases) {}
 

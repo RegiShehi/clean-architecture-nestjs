@@ -15,19 +15,15 @@ import { registerUserSchema } from './validation/register-user-schema';
 import { JoiValidationPipe } from 'src/infrastructure/pipes/validation.pipe';
 import { Response } from 'express';
 import loginUserSchema from './validation/login-user-schema';
-import { UserUseCases } from 'src/use-cases/user/user.use-case';
 import { JwtAuthGuard } from 'src/infrastructure/guards/jwt-auth.guard';
 import { UserDecorator } from 'src/infrastructure/decorators/user.decorator';
-// import { User } from 'src/domain/models/user.model';
 import JwtRefreshGuard from 'src/infrastructure/guards/jwt-refresh.guard';
+import { UserViewModel } from 'src/domain/viewModels/user.view-model';
 
 @ApiTags('authentication')
 @Controller('auth')
 export class AuthController {
-  constructor(
-    private authUseCases: AuthUseCases,
-    private userUseCases: UserUseCases,
-  ) {}
+  constructor(private authUseCases: AuthUseCases) {}
 
   @Post('signup')
   @UsePipes(new JoiValidationPipe(registerUserSchema))
@@ -54,7 +50,7 @@ export class AuthController {
   @HttpCode(200)
   @UseGuards(JwtAuthGuard)
   async logout(
-    @UserDecorator() user: any,
+    @UserDecorator() user: UserViewModel,
     @Res({ passthrough: true }) response: Response,
   ) {
     const cookies = await this.authUseCases.logout(user.email);
@@ -65,7 +61,7 @@ export class AuthController {
   @UseGuards(JwtRefreshGuard)
   @Get('refresh')
   async refresh(
-    @UserDecorator() user: any,
+    @UserDecorator() user: UserViewModel,
     @Res({ passthrough: true }) response: Response,
   ) {
     const cookieWithJwtToken =
@@ -76,7 +72,7 @@ export class AuthController {
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  getProfile(@UserDecorator() user: any) {
+  getProfile(@UserDecorator() user: UserViewModel) {
     return user;
   }
 }

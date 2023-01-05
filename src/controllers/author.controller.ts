@@ -6,8 +6,8 @@ import { createAuthorSchema } from './validation/create-author-schema';
 import { ApiTags } from '@nestjs/swagger';
 import { IException } from 'src/domain/abstracts/exception-services.abstract';
 
-@ApiTags('author')
-@Controller('author')
+@ApiTags('authors')
+@Controller('authors')
 export class AuthorController {
   constructor(
     private authorUseCases: AuthorUseCases,
