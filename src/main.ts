@@ -1,12 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { IEnvironmentConfig } from './domain/abstracts/config/environment-config.abstract';
 import { LoggingInterceptor } from './infrastructure/common/interceptors/logger.interceptor';
-import cookieParser from 'cookie-parser';
 import { WinstonLoggerConfig } from './infrastructure/services/logger/logger.config';
 import { LoggerService } from './infrastructure/services/logger/logger.service';
+import cookieParser from 'cookie-parser';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
