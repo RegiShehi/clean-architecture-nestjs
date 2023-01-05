@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
-import { DataServicesModule } from 'src/services/data/data-services.module';
+import { BcryptModule } from 'src/infrastructure/services/auth/bcrypt/bcrypt.module';
+import { JwtServiceModule } from 'src/infrastructure/services/auth/jwt/jwt.module';
+import { JwtRefreshTokenStrategy } from 'src/infrastructure/services/auth/jwt/strategies/jwt-refresh-token.strategy';
+import { JwtStrategy } from 'src/infrastructure/services/auth/jwt/strategies/jwt.strategy';
+import { JWTConfigModule } from 'src/infrastructure/services/configuration/jwt/jwt-config.module';
+import { DataServicesModule } from 'src/infrastructure/services/database/data-services.module';
+import { ExceptionsModule } from 'src/infrastructure/services/exceptions/exceptions.module';
 import { AuthUseCases } from './auth.use-case';
-import { ExceptionsModule } from 'src/infrastructure/exceptions/exceptions.module';
-import { BcryptModule } from 'src/services/auth/bcrypt/bcrypt.module';
-import { JWTConfigModule } from 'src/services/configuration/jwt/jwt-config.module';
-import { JwtServiceModule } from 'src/services/auth/jwt/jwt.module';
-import { JwtStrategy } from 'src/services/auth/strategies/jwt.strategy';
-import { JwtRefreshTokenStrategy } from 'src/services/auth/strategies/jwt-refresh-token.strategy';
 
 @Module({
   imports: [

@@ -1,6 +1,6 @@
 import { PipeTransform, Injectable } from '@nestjs/common';
 import { ObjectSchema, ValidationOptions } from 'joi';
-import { ExceptionsService } from '../exceptions/exceptions.service';
+import { ExceptionsService } from 'src/infrastructure/services/exceptions/exceptions.service';
 
 @Injectable()
 export class JoiValidationPipe

@@ -2,7 +2,7 @@ import { Injectable, OnApplicationBootstrap } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
-import { TypeOrmGenericRepository } from './typeorm-generic-repository';
+import { TypeOrmGenericRepository } from '../../../repositories/typeorm-generic.repository';
 import { IBookRepository } from 'src/domain/abstracts/repositories/book-repository.abstract';
 import { IUserRepository } from 'src/domain/abstracts/repositories/user-repository.abstract';
 import { IGenericRepository } from 'src/domain/abstracts/repositories/generic-repository.abstract';

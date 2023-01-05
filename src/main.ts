@@ -3,10 +3,10 @@ import { AppModule } from './app.module';
 
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { IEnvironmentConfig } from './domain/abstracts/config/environment-config.abstract';
-import { LoggingInterceptor } from './infrastructure/interceptors/logger.interceptor';
-import { LoggerService } from './infrastructure/logger/logger.service';
-import { WinstonLoggerConfig } from './infrastructure/logger/logger.config';
+import { LoggingInterceptor } from './infrastructure/common/interceptors/logger.interceptor';
 import cookieParser from 'cookie-parser';
+import { WinstonLoggerConfig } from './infrastructure/services/logger/logger.config';
+import { LoggerService } from './infrastructure/services/logger/logger.service';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

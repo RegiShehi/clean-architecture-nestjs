@@ -3,7 +3,7 @@ import { IJwt } from 'src/domain/abstracts/adapter/jwt.abstract';
 import { JwtTokenService } from './jwt.service';
 import { JwtModule, JwtModuleOptions } from '@nestjs/jwt';
 import { IJWTConfig } from 'src/domain/abstracts/config/jwt-config.abstract';
-import { JWTConfigModule } from 'src/services/configuration/jwt/jwt-config.module';
+import { JWTConfigModule } from '../../configuration/jwt/jwt-config.module';
 
 export const getJWTModuleOptions = (config: IJWTConfig): JwtModuleOptions =>
   ({

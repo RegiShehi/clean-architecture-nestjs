@@ -2,11 +2,11 @@ import { Module } from '@nestjs/common';
 import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
 import { TypeOrmDataServices } from './typeorm-data-services.service';
 import { TypeOrmModule, TypeOrmModuleOptions } from '@nestjs/typeorm';
-import { DatabaseConfigModule } from 'src/services/configuration/database/database-config.module';
 import { IDataBaseConfig } from 'src/domain/abstracts/config/database-config.abstract';
 import { BookEntity } from './entities/book.entity';
 import { UserEntity } from './entities/user.entity';
 import { AuthorEntity } from './entities/author.entity';
+import { DatabaseConfigModule } from '../../configuration/database/database-config.module';
 
 export const getTypeOrmModuleOptions = (
   config: IDataBaseConfig,

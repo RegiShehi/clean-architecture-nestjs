@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmDataServicesModule } from 'src/infrastructure/database/typeorm/typeorm-data-services.module';
+import { TypeOrmDataServicesModule } from './typeorm/typeorm-data-services.module';
 
 @Module({
   imports: [TypeOrmDataServicesModule],

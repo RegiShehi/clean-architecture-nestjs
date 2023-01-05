@@ -1,10 +1,10 @@
 import { Body, Controller, Get, Param, Post, UsePipes } from '@nestjs/common';
 import { CreateAuthorDto } from 'src/domain/dtos/author.dto';
 import { AuthorUseCases } from 'src/use-cases/author/author.use-case';
-import { JoiValidationPipe } from 'src/infrastructure/pipes/validation.pipe';
 import { createAuthorSchema } from './validation/create-author-schema';
 import { ApiTags } from '@nestjs/swagger';
 import { IException } from 'src/domain/abstracts/exception-services.abstract';
+import { JoiValidationPipe } from 'src/infrastructure/common/pipes/validation.pipe';
 
 @ApiTags('authors')
 @Controller('authors')

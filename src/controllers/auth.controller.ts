@@ -12,13 +12,13 @@ import { ApiTags } from '@nestjs/swagger';
 import { LoginUserDto, RegisterUserDto } from 'src/domain/dtos/user.dto';
 import { AuthUseCases } from 'src/use-cases/auth/auth.use-case';
 import { registerUserSchema } from './validation/register-user-schema';
-import { JoiValidationPipe } from 'src/infrastructure/pipes/validation.pipe';
 import { Response } from 'express';
-import loginUserSchema from './validation/login-user-schema';
-import { JwtAuthGuard } from 'src/infrastructure/guards/jwt-auth.guard';
-import { UserDecorator } from 'src/infrastructure/decorators/user.decorator';
-import JwtRefreshGuard from 'src/infrastructure/guards/jwt-refresh.guard';
+import { JwtAuthGuard } from 'src/infrastructure/common/guards/jwt-auth.guard';
+import { UserDecorator } from 'src/infrastructure/common/decorators/user.decorator';
 import { UserViewModel } from 'src/domain/viewModels/user.view-model';
+import { JoiValidationPipe } from 'src/infrastructure/common/pipes/validation.pipe';
+import loginUserSchema from './validation/login-user-schema';
+import JwtRefreshGuard from 'src/infrastructure/common/guards/jwt-refresh.guard';
 
 @ApiTags('authentication')
 @Controller('auth')

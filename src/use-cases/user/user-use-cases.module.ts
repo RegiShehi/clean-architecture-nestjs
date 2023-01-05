@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
-import { DataServicesModule } from 'src/services/data/data-services.module';
 import { UserUseCases } from './user.use-case';
+import { DataServicesModule } from 'src/infrastructure/services/database/data-services.module';
 
 @Module({
   imports: [DataServicesModule],
