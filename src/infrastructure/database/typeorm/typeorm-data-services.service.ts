@@ -3,15 +3,14 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
 import { TypeOrmGenericRepository } from './typeorm-generic-repository';
-import { BookRepository } from 'src/infrastructure/repositories/book-repository';
 import { IBookRepository } from 'src/domain/abstracts/repositories/book-repository.abstract';
-import { UserRepository } from 'src/infrastructure/repositories/user-repository';
-
 import { IUserRepository } from 'src/domain/abstracts/repositories/user-repository.abstract';
 import { IGenericRepository } from 'src/domain/abstracts/repositories/generic-repository.abstract';
 import { AuthorEntity } from './entities/author.entity';
 import { BookEntity } from './entities/book.entity';
 import { UserEntity } from './entities/user.entity';
+import { BookRepository } from 'src/infrastructure/repositories/book.repository';
+import { UserRepository } from 'src/infrastructure/repositories/user.repository';
 
 @Injectable()
 export class TypeOrmDataServices
