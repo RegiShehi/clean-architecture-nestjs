@@ -48,9 +48,7 @@ export class AuthUseCases {
   async login(loginData: LoginUserDto): Promise<Cookie> {
     const { email, password } = loginData;
 
-    const user = await this.dataServices.users.findByEmailIncludePassword(
-      email,
-    );
+    const user = await this.dataServices.users.findByEmail(email);
 
     if (!user) {
       throw this.exception.badRequestException('Wrong credentials provided');

@@ -1,6 +1,4 @@
 import { IUserRepository } from 'src/domain/abstracts/repositories/user-repository.abstract';
-import { User } from 'src/domain/models/user.model';
-import { UserViewModel } from 'src/domain/viewModels/user.view-model';
 import {
   TypeOrmGenericRepository,
   typeReturn,
@@ -11,23 +9,12 @@ export class UserRepository
   extends TypeOrmGenericRepository<UserEntity>
   implements IUserRepository
 {
-  async findByEmail(email: string): Promise<UserViewModel> {
+  async findByEmail(email: string) {
     return await this.repository.findOneBy({ email });
   }
 
-  async findByEmailIncludePassword(email: string): Promise<User> {
-    return await this.repository
-      .createQueryBuilder('user')
-      .addSelect('user.password')
-      .where('user.email = :email', { email })
-      .getOne();
-  }
-
-  async saveRefreshToken(
-    refreshToken: string,
-    email: string,
-  ): Promise<UserViewModel> {
-    return await typeReturn<UserViewModel>(
+  async saveRefreshToken(refreshToken: string, email: string) {
+    return await typeReturn<UserEntity>(
       this.repository.update(
         { email },
         {
@@ -37,8 +24,8 @@ export class UserRepository
     );
   }
 
-  async removeRefreshToken(email: string): Promise<UserViewModel> {
-    return await typeReturn<UserViewModel>(
+  async removeRefreshToken(email: string) {
+    return await typeReturn<UserEntity>(
       this.repository.update(
         { email },
         {

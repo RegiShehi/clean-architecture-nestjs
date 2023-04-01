@@ -1,6 +1,6 @@
 import { AutoMap } from '@automapper/classes';
 
-export class UserViewModel {
+export class UserViewModelMinified {
   @AutoMap()
   id: number;
 
@@ -12,7 +12,9 @@ export class UserViewModel {
 
   @AutoMap()
   lastName?: string;
+}
 
+export class UserViewModel extends UserViewModelMinified {
   @AutoMap()
   refreshToken?: string;
 }

@@ -15,15 +15,24 @@ import { registerUserSchema } from './validation/register-user-schema';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/infrastructure/common/guards/jwt-auth.guard';
 import { UserDecorator } from 'src/infrastructure/common/decorators/user.decorator';
-import { UserViewModel } from 'src/domain/viewModels/user.view-model';
+import {
+  UserViewModel,
+  UserViewModelMinified,
+} from 'src/domain/viewModels/user.view-model';
 import { JoiValidationPipe } from 'src/infrastructure/common/pipes/validation.pipe';
+import { InjectMapper } from '@automapper/nestjs';
+import { Mapper } from '@automapper/core';
+import { UserEntity } from 'src/infrastructure/services/database/typeorm/entities/user.entity';
 import loginUserSchema from './validation/login-user-schema';
 import JwtRefreshGuard from 'src/infrastructure/common/guards/jwt-refresh.guard';
 
 @ApiTags('authentication')
 @Controller('auth')
 export class AuthController {
-  constructor(private authUseCases: AuthUseCases) {}
+  constructor(
+    private authUseCases: AuthUseCases,
+    @InjectMapper() private readonly mapper: Mapper,
+  ) {}
 
   @Post('signup')
   @UsePipes(new JoiValidationPipe(registerUserSchema))
@@ -72,7 +81,7 @@ export class AuthController {
 
   @Get('profile')
   @UseGuards(JwtAuthGuard)
-  getProfile(@UserDecorator() user: UserViewModel) {
-    return user;
+  getProfile(@UserDecorator() user: UserEntity) {
+    return this.mapper.map(user, UserEntity, UserViewModelMinified);
   }
 }

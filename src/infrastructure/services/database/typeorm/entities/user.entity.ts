@@ -12,7 +12,7 @@ class UserEntity {
   public email: string;
 
   @AutoMap()
-  @Column({ select: false })
+  @Column()
   public password: string;
 
   @AutoMap()
