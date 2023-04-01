@@ -21,6 +21,9 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@automapper/classes": "^8.7.7",
+    "@automapper/core": "^8.7.7",
+    "@automapper/nestjs": "^8.7.7",
     "@aws-sdk/client-cloudwatch-logs": "^3.241.0",
     "@nestjs/common": "^8.0.0",
     "@nestjs/config": "^2.2.0",
@@ -50,6 +53,7 @@
     "winston-cloudwatch": "^6.1.1"
   },
   "devDependencies": {
+    "@automapper/types": "^6.3.1",
     "@nestjs/cli": "^8.0.0",
     "@nestjs/schematics": "^8.0.0",
     "@nestjs/testing": "^8.0.0",

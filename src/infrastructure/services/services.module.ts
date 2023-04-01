@@ -5,6 +5,8 @@ import { EnvironmentConfigModule } from './configuration/common/environment-conf
 import { DataServicesModule } from './database/data-services.module';
 import { ExceptionsModule } from './exceptions/exceptions.module';
 import { LoggerModule } from './logger/logger.module';
+import { AutomapperModule } from '@automapper/nestjs';
+import { classes } from '@automapper/classes';
 
 @Module({
   imports: [
@@ -14,6 +16,9 @@ import { LoggerModule } from './logger/logger.module';
     LoggerModule,
     BcryptModule,
     JwtServiceModule,
+    AutomapperModule.forRoot({
+      strategyInitializer: classes(),
+    }),
   ],
   exports: [
     EnvironmentConfigModule,

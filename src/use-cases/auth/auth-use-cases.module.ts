@@ -7,6 +7,7 @@ import { JWTConfigModule } from 'src/infrastructure/services/configuration/jwt/j
 import { DataServicesModule } from 'src/infrastructure/services/database/data-services.module';
 import { ExceptionsModule } from 'src/infrastructure/services/exceptions/exceptions.module';
 import { AuthUseCases } from './auth.use-case';
+import { UserProfile } from 'src/infrastructure/common/profiles/user.profile';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { AuthUseCases } from './auth.use-case';
     JWTConfigModule,
     JwtServiceModule,
   ],
-  providers: [AuthUseCases, JwtStrategy, JwtRefreshTokenStrategy],
+  providers: [AuthUseCases, JwtStrategy, JwtRefreshTokenStrategy, UserProfile],
   exports: [AuthUseCases],
 })
 export class AuthUseCasesModule {}

@@ -1,3 +1,5 @@
+import { Mapper } from '@automapper/core';
+import { InjectMapper } from '@automapper/nestjs';
 import { Injectable } from '@nestjs/common';
 import { IBcrypt } from 'src/domain/abstracts/adapter/bcrypt.abstract';
 import { IJwt, IJwtPayload } from 'src/domain/abstracts/adapter/jwt.abstract';
@@ -6,7 +8,8 @@ import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
 import { IException } from 'src/domain/abstracts/exception-services.abstract';
 import { LoginUserDto, RegisterUserDto } from 'src/domain/dtos/user.dto';
 import { Cookie } from 'src/domain/models/cookie.model';
-import { User } from 'src/domain/models/user.model';
+import { UserViewModel } from 'src/domain/viewModels/user.view-model';
+import { UserEntity } from 'src/infrastructure/services/database/typeorm/entities/user.entity';
 
 @Injectable()
 export class AuthUseCases {
@@ -16,9 +19,10 @@ export class AuthUseCases {
     private bcrypt: IBcrypt,
     private jwt: IJwt,
     private config: IJWTConfig,
+    @InjectMapper() private readonly mapper: Mapper,
   ) {}
 
-  async register(registerUserData: RegisterUserDto): Promise<User> {
+  async register(registerUserData: RegisterUserDto) {
     const user = await this.dataServices.users.findByEmail(
       registerUserData.email,
     );
@@ -30,12 +34,15 @@ export class AuthUseCases {
 
     const hashedPassword = await this.bcrypt.hash(registerUserData.password);
 
-    const createdUser = this.dataServices.users.create({
-      ...registerUserData,
-      password: hashedPassword,
-    });
+    const entity = this.mapper.map(
+      { ...registerUserData, password: hashedPassword },
+      RegisterUserDto,
+      UserEntity,
+    );
 
-    return createdUser;
+    const createdUser = await this.dataServices.users.create(entity);
+
+    return this.mapper.map(createdUser, UserEntity, UserViewModel);
   }
 
   async login(loginData: LoginUserDto): Promise<Cookie> {
