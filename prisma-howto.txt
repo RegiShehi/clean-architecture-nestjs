@@ -60,29 +60,38 @@ export class UserRepository extends BaseRepository<User> {
 
 
 //Prisma dataservices
-import { Injectable } from '@nestjs/common';
-import { PrismaClient } from '@prisma/client';
+import { Injectable, OnModuleInit, OnModuleDestroy } from '@nestjs/common';
+import { PrismaClient, Author, Book, User } from '@prisma/client';
 import { IBookRepository } from 'src/domain/abstracts/repositories/book-repository.abstract';
 import { IUserRepository } from 'src/domain/abstracts/repositories/user-repository.abstract';
 import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
 import { IGenericRepository } from 'src/domain/abstracts/repositories/generic-repository.abstract';
-import { Author, Book, User } from '@prisma/client';
 import { PrismaGenericRepository } from '../../../repositories/prisma-generic.repository';
 import { PrismaBookRepository } from 'src/infrastructure/repositories/prisma-book.repository';
 import { PrismaUserRepository } from 'src/infrastructure/repositories/prisma-user.repository';
 
 @Injectable()
-export class PrismaDataServices implements IDataServices {
+export class PrismaDataServices extends PrismaClient implements IDataServices, OnModuleInit, OnModuleDestroy {
   authors: IGenericRepository<Author>;
   books: IBookRepository;
   users: IUserRepository;
 
-  constructor(private prisma: PrismaClient) {
-    this.authors = new PrismaGenericRepository<Author>(prisma.author);
-    this.books = new PrismaBookRepository(prisma.book);
-    this.users = new PrismaUserRepository(prisma.user);
+  constructor() {
+    super();
+    this.authors = new PrismaGenericRepository<Author>(this.author);
+    this.books = new PrismaBookRepository(this.book);
+    this.users = new PrismaUserRepository(this.user);
+  }
+
+  async onModuleInit() {
+    await this.$connect();
+  }
+
+  async onModuleDestroy() {
+    await this.$disconnect();
   }
 }
+
 
 
 //Prisma dataservices module
