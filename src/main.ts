@@ -31,6 +31,7 @@ async function bootstrap() {
 
   app.useLogger(WinstonLoggerConfig(configService.logger));
   app.useGlobalInterceptors(new LoggingInterceptor(new LoggerService()));
+  app.enableCors({ origin: '*', credentials: true });
 
   await app.listen(configService.getServerPort());
 }
