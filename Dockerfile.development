@@ -1,12 +1,13 @@
 FROM node:16
 
+ENV NODE_ENV development
+
 WORKDIR /app
 
-COPY package.json .
-COPY yarn.lock .
+COPY package*.json ./
 
-RUN yarn install
+RUN npm install --force
 
 COPY . .
 
-CMD [ "yarn", "start:dev" ]
+CMD [ "npm", "run", "start:dev" ]

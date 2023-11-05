@@ -1,4 +1,4 @@
-version: "3"
+version: '3'
 services:
   nest-api:
     container_name: clean-architecture-api
@@ -23,7 +23,7 @@ services:
       - 5432:5432
     env_file:
       - .env.development
-    volumes: 
+    volumes:
       - postgres:/var/lib/postgresql/data
 
   pgadmin:
@@ -31,11 +31,11 @@ services:
     image: dpage/pgadmin4:6.4
     restart: always
     ports:
-    - 8080:80
+      - 8080:80
     volumes:
-    - /data/pgadmin:/root/.pgadmin
+      - /data/pgadmin:/root/.pgadmin
     env_file:
-    - .env.development
+      - .env.development
     # environment:
     #   PGADMIN_DEFAULT_EMAIL: admin@admin.com
     #   PGADMIN_DEFAULT_PASSWORD: root
