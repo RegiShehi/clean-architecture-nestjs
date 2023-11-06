@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
-import { AuthUseCasesModule } from './auth/auth-use-cases.module';
+import { AuthUseCasesModule } from './auth/auth.use-cases.module';
 import { AuthorUseCasesModule } from './author/author-use-cases.module';
-import { BookUseCasesModule } from './book/book-use-cases.module';
+import { BookUseCasesModule } from './book/book.use-cases.module';
 import { UserUseCasesModule } from './user/user-use-cases.module';
 
 @Module({

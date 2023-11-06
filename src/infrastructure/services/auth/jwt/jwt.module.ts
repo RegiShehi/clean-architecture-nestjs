@@ -11,7 +11,7 @@ export const getJWTModuleOptions = (config: IJWTConfig): JwtModuleOptions =>
     signOptions: {
       expiresIn: config.getJWTExpirationTime(),
     },
-  } as JwtModuleOptions);
+  }) as JwtModuleOptions;
 
 @Module({
   imports: [
