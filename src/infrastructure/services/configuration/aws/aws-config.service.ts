@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { AWSCloudWatchConfiguration } from 'src/configuration';
 import { IAWSConfig } from 'src/domain/abstracts/config/aws-config.abstract';
+import { AWSCloudWatchConfiguration } from 'src/utils/configuration';
 
 @Injectable()
 export class AWSConfigService implements IAWSConfig {

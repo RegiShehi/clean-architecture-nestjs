@@ -4,7 +4,7 @@ import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
 import { dataServicesMock } from 'src/utils/mocks/data-services.mock';
 
 describe('BookUseCases', () => {
-  let service: BookUseCases;
+  let bookUseCase: BookUseCases;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -17,15 +17,15 @@ describe('BookUseCases', () => {
       ],
     }).compile();
 
-    service = module.get<BookUseCases>(BookUseCases);
+    bookUseCase = module.get<BookUseCases>(BookUseCases);
   });
 
   it('should be defined', () => {
-    expect(service).toBeDefined();
+    expect(bookUseCase).toBeDefined();
   });
 
   it('should call doSmth method', () => {
-    service.doSmth();
+    bookUseCase.doSmth();
 
     expect(dataServicesMock.books.doSmth).toHaveBeenCalled();
   });

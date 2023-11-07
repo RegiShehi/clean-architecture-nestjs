@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
-import { DBConfiguration } from 'src/configuration';
 import { IDataBaseConfig } from 'src/domain/abstracts/config/database-config.abstract';
+import { DBConfiguration } from 'src/utils/configuration';
 
 @Injectable()
 export class DatabaseConfigService implements IDataBaseConfig {
