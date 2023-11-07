@@ -3,16 +3,12 @@ import { CreateAuthorDto } from 'src/domain/dtos/author.dto';
 import { AuthorUseCases } from 'src/use-cases/author/author.use-case';
 import { createAuthorSchema } from './validation/create-author-schema';
 import { ApiTags } from '@nestjs/swagger';
-import { IException } from 'src/domain/abstracts/exception-services.abstract';
 import { JoiValidationPipe } from 'src/infrastructure/common/pipes/validation.pipe';
 
 @ApiTags('authors')
 @Controller('authors')
 export class AuthorController {
-  constructor(
-    private authorUseCases: AuthorUseCases,
-    private readonly exceptions: IException,
-  ) {}
+  constructor(private authorUseCases: AuthorUseCases) {}
 
   @Get()
   async getAll() {

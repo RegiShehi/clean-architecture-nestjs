@@ -1,7 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
 import { AuthUseCases } from './auth.use-case';
-import { IException } from 'src/domain/abstracts/exception-services.abstract';
 import { AutomapperModule, getMapperToken } from '@automapper/nestjs';
 import { IBcrypt } from 'src/domain/abstracts/adapter/bcrypt.abstract';
 import { IJwt } from 'src/domain/abstracts/adapter/jwt.abstract';
@@ -18,7 +17,6 @@ import { BadRequestException } from '@nestjs/common';
 describe('Authentication use cases', () => {
   let authUseCases: AuthUseCases;
   let dataService: IDataServices;
-  let exceptionService: IException;
   let bcrypt: IBcrypt;
   //   let jwt: IJwt;
   //   let config: IJWTConfig;
@@ -57,16 +55,6 @@ describe('Authentication use cases', () => {
           },
         },
         {
-          provide: IException,
-          useValue: {
-            badRequestException: jest
-              .fn()
-              .mockReturnValue(
-                `User with email ${registerUserData.email} already exists`,
-              ),
-          },
-        },
-        {
           provide: IBcrypt,
           useValue: {
             hash: jest.fn().mockResolvedValue(HASHED_PASSWORD),
@@ -91,7 +79,6 @@ describe('Authentication use cases', () => {
 
     authUseCases = module.get<AuthUseCases>(AuthUseCases);
     dataService = module.get<IDataServices>(IDataServices);
-    exceptionService = module.get<IException>(IException);
     bcrypt = module.get<IBcrypt>(IBcrypt);
     // jwt = module.get<IJwt>(IJwt);
     // config = module.get<IJWTConfig>(IJWTConfig);
@@ -147,9 +134,9 @@ describe('Authentication use cases', () => {
         refreshToken: REFRESH_TOKEN,
       });
 
-      await authUseCases.register(registerUserData);
-
-      expect(exceptionService.badRequestException).toHaveBeenCalled();
+      await expect(authUseCases.register(registerUserData)).rejects.toThrow(
+        BadRequestException,
+      );
     });
   });
 });

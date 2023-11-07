@@ -5,14 +5,12 @@ import { JwtRefreshTokenStrategy } from 'src/infrastructure/services/auth/jwt/st
 import { JwtStrategy } from 'src/infrastructure/services/auth/jwt/strategies/jwt.strategy';
 import { JWTConfigModule } from 'src/infrastructure/services/configuration/jwt/jwt-config.module';
 import { DataServicesModule } from 'src/infrastructure/services/database/data-services.module';
-import { ExceptionsModule } from 'src/infrastructure/services/exceptions/exceptions.module';
 import { AuthUseCases } from './auth.use-case';
 import { UserProfile } from 'src/infrastructure/common/profiles/user.profile';
 
 @Module({
   imports: [
     DataServicesModule,
-    ExceptionsModule,
     BcryptModule,
     JWTConfigModule,
     JwtServiceModule,

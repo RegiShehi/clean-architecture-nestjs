@@ -3,7 +3,6 @@ import { BcryptModule } from './auth/bcrypt/bcrypt.module';
 import { JwtServiceModule } from './auth/jwt/jwt.module';
 import { EnvironmentConfigModule } from './configuration/common/environment-config.module';
 import { DataServicesModule } from './database/data-services.module';
-import { ExceptionsModule } from './exceptions/exceptions.module';
 import { LoggerModule } from './logger/logger.module';
 import { AutomapperModule } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
@@ -12,7 +11,6 @@ import { classes } from '@automapper/classes';
   imports: [
     EnvironmentConfigModule,
     DataServicesModule,
-    ExceptionsModule,
     LoggerModule,
     BcryptModule,
     JwtServiceModule,
@@ -23,7 +21,6 @@ import { classes } from '@automapper/classes';
   exports: [
     EnvironmentConfigModule,
     DataServicesModule,
-    ExceptionsModule,
     LoggerModule,
     BcryptModule,
     JwtServiceModule,

@@ -1,11 +1,10 @@
 import { Mapper } from '@automapper/core';
 import { InjectMapper } from '@automapper/nestjs';
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { IBcrypt } from 'src/domain/abstracts/adapter/bcrypt.abstract';
 import { IJwt, IJwtPayload } from 'src/domain/abstracts/adapter/jwt.abstract';
 import { IJWTConfig } from 'src/domain/abstracts/config/jwt-config.abstract';
 import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
-import { IException } from 'src/domain/abstracts/exception-services.abstract';
 import { LoginUserDto, RegisterUserDto } from 'src/domain/dtos/user.dto';
 import { Cookie } from 'src/domain/models/cookie.model';
 import { UserViewModel } from 'src/domain/viewModels/user.view-model';
@@ -15,7 +14,6 @@ import { UserEntity } from 'src/infrastructure/services/database/typeorm/entitie
 export class AuthUseCases {
   constructor(
     private dataServices: IDataServices,
-    private exception: IException,
     private bcrypt: IBcrypt,
     private jwt: IJwt,
     private config: IJWTConfig,
@@ -28,7 +26,7 @@ export class AuthUseCases {
     );
 
     if (user)
-      throw this.exception.badRequestException(
+      throw new BadRequestException(
         `User with email ${registerUserData.email} already exists`,
       );
 
@@ -51,7 +49,7 @@ export class AuthUseCases {
     const user = await this.dataServices.users.findByEmail(email);
 
     if (!user) {
-      throw this.exception.badRequestException('Wrong credentials provided');
+      throw new BadRequestException('Wrong credentials provided');
     }
 
     await this.verifyPassword(password, user.password);
@@ -121,7 +119,7 @@ export class AuthUseCases {
     );
 
     if (!isPasswordMatching) {
-      throw this.exception.badRequestException('Wrong credentials provided');
+      throw new BadRequestException('Wrong credentials provided');
     }
   }
 }

@@ -1,15 +1,9 @@
-import { PipeTransform, Injectable } from '@nestjs/common';
+import { PipeTransform, Injectable, BadRequestException } from '@nestjs/common';
 import { ObjectSchema, ValidationOptions } from 'joi';
-import { ExceptionsService } from 'src/infrastructure/services/exceptions/exceptions.service';
 
 @Injectable()
-export class JoiValidationPipe
-  extends ExceptionsService
-  implements PipeTransform
-{
-  constructor(private schema: ObjectSchema) {
-    super();
-  }
+export class JoiValidationPipe implements PipeTransform {
+  constructor(private schema: ObjectSchema) {}
 
   transform(value: any) {
     const options: ValidationOptions = {
@@ -25,7 +19,7 @@ export class JoiValidationPipe
 
     if (error) {
       const messages = error.details.map((d) => d.message).join(' && ');
-      throw this.badRequestException(messages);
+      throw new BadRequestException(messages);
     }
 
     return value;
