@@ -28,7 +28,7 @@ export class TypeOrmGenericRepository<T extends { id: number }>
     return await this.repository.findOneBy({ id } as FindOptionsWhere<T>);
   }
 
-  async create(item: T): Promise<T> {
+  async create(item: any): Promise<T> {
     return await this.repository.save(item);
   }
 
