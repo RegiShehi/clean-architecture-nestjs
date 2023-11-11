@@ -6,11 +6,10 @@ import { IBcrypt } from 'src/domain/abstracts/adapter/bcrypt.abstract';
 import { IJwt } from 'src/domain/abstracts/adapter/jwt.abstract';
 import { IJWTConfig } from 'src/domain/abstracts/config/jwt-config.abstract';
 import { classes } from '@automapper/classes';
-import { Mapper, createMapper } from '@automapper/core';
+import { createMapper } from '@automapper/core';
 import { RegisterUserDto } from 'src/domain/dtos/user.dto';
 import { UserProfile } from 'src/infrastructure/common/profiles/user.profile';
 import { dataServicesMock } from 'src/utils/mocks/data-services.mock';
-import { UserEntity } from 'src/infrastructure/services/database/typeorm/entities/user.entity';
 import { UserViewModel } from 'src/domain/viewModels/user.view-model';
 import { BadRequestException } from '@nestjs/common';
 
@@ -20,7 +19,7 @@ describe('Authentication use cases', () => {
   let bcrypt: IBcrypt;
   //   let jwt: IJwt;
   //   let config: IJWTConfig;
-  let mapper: Mapper;
+  //   let mapper: Mapper;
 
   const findByEmailMock = jest.fn();
 
@@ -82,7 +81,7 @@ describe('Authentication use cases', () => {
     bcrypt = module.get<IBcrypt>(IBcrypt);
     // jwt = module.get<IJwt>(IJwt);
     // config = module.get<IJWTConfig>(IJWTConfig);
-    mapper = module.get<Mapper>(getMapperToken());
+    // mapper = module.get<Mapper>(getMapperToken());
   });
 
   it('should be defined', () => {
@@ -93,34 +92,19 @@ describe('Authentication use cases', () => {
     it('should create a new user', async () => {
       findByEmailMock.mockResolvedValue(null);
 
-      await authUseCases.register(registerUserData);
+      const user = await authUseCases.register(registerUserData);
 
-      const user = await dataService.users.findByEmail(registerUserData.email);
-
-      const entity = mapper.map(
-        { ...registerUserData, password: HASHED_PASSWORD },
-        RegisterUserDto,
-        UserEntity,
-      );
-
-      const createdUser = await dataService.users.create(entity);
-
-      const result = mapper.map(createdUser, UserEntity, UserViewModel);
-
-      expect(dataService.users.findByEmail).toHaveBeenCalledWith(
-        registerUserData.email,
-      );
       expect(bcrypt.hash).toHaveBeenCalledWith(registerUserData.password);
-      expect(user).toBeNull();
-      expect(entity).toBeInstanceOf(UserEntity);
-      expect(result).toBeInstanceOf(UserViewModel);
       expect(dataService.users.create).toHaveBeenCalledWith({
         ...registerUserData,
         password: HASHED_PASSWORD,
       });
-      expect(createdUser).toEqual({
-        ...registerUserData,
+      expect(user).toBeInstanceOf(UserViewModel);
+      expect(user).toEqual({
         id: 1,
+        email: registerUserData.email,
+        firstName: registerUserData.firstName,
+        lastName: registerUserData.lastName,
         refreshToken: REFRESH_TOKEN,
       });
     });

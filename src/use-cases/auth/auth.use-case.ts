@@ -32,13 +32,10 @@ export class AuthUseCases {
 
     const hashedPassword = await this.bcrypt.hash(registerUserData.password);
 
-    const entity = this.mapper.map(
-      { ...registerUserData, password: hashedPassword },
-      RegisterUserDto,
-      UserEntity,
-    );
-
-    const createdUser = await this.dataServices.users.create(entity);
+    const createdUser = await this.dataServices.users.create({
+      ...registerUserData,
+      password: hashedPassword,
+    });
 
     return this.mapper.map(createdUser, UserEntity, UserViewModel);
   }
