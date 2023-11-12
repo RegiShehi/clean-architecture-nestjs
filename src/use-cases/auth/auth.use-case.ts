@@ -91,7 +91,7 @@ export class AuthUseCases {
     return `Authorization=${jwtToken}; HttpOnly; Path=/; Max-Age=${maxAge}`;
   }
 
-  private async generateCookieWithJwtRefreshToken(payload: IJwtPayload) {
+  public async generateCookieWithJwtRefreshToken(payload: IJwtPayload) {
     const maxAge = this.config.getJWTRefreshTokenExpirationTime();
 
     const refreshToken = await this.jwt.createToken(

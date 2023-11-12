@@ -7,9 +7,8 @@ import { IJwt } from 'src/domain/abstracts/adapter/jwt.abstract';
 import { IJWTConfig } from 'src/domain/abstracts/config/jwt-config.abstract';
 import { classes } from '@automapper/classes';
 import { createMapper } from '@automapper/core';
-import { RegisterUserDto } from 'src/domain/dtos/user.dto';
+import { LoginUserDto, RegisterUserDto } from 'src/domain/dtos/user.dto';
 import { UserProfile } from 'src/infrastructure/common/profiles/user.profile';
-import { dataServicesMock } from 'src/utils/mocks/data-services.mock';
 import { UserViewModel } from 'src/domain/viewModels/user.view-model';
 import { BadRequestException } from '@nestjs/common';
 
@@ -17,21 +16,26 @@ describe('Authentication use cases', () => {
   let authUseCases: AuthUseCases;
   let dataService: IDataServices;
   let bcrypt: IBcrypt;
-  //   let jwt: IJwt;
-  //   let config: IJWTConfig;
-  //   let mapper: Mapper;
 
   const findByEmailMock = jest.fn();
+  const bCryptCompareMock = jest.fn();
+  const bCryptHashMock = jest.fn();
 
   const registerUserData: RegisterUserDto = {
     email: 'test@example.com',
     password: 'password',
-    firstName: 'Regi',
-    lastName: 'Shehi',
+    firstName: 'John',
+    lastName: 'Doe',
+  };
+
+  const loginUserData: LoginUserDto = {
+    email: 'test@example.com',
+    password: 'password',
   };
 
   const REFRESH_TOKEN = 'somerandomstring';
   const HASHED_PASSWORD = 'hashedPassword';
+  const HASHED_REFRESH_TOKEN = 'hashedRefreshToken';
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -42,12 +46,16 @@ describe('Authentication use cases', () => {
         {
           provide: IDataServices,
           useValue: {
-            ...dataServicesMock,
             users: {
               findByEmail: findByEmailMock,
-              create: jest.fn().mockResolvedValue({
-                ...registerUserData,
+              saveRefreshToken: jest.fn().mockResolvedValue({
                 id: 1,
+                ...loginUserData,
+                refreshToken: HASHED_REFRESH_TOKEN,
+              }),
+              create: jest.fn().mockResolvedValue({
+                id: 1,
+                ...registerUserData,
                 refreshToken: REFRESH_TOKEN,
               }),
             },
@@ -56,7 +64,8 @@ describe('Authentication use cases', () => {
         {
           provide: IBcrypt,
           useValue: {
-            hash: jest.fn().mockResolvedValue(HASHED_PASSWORD),
+            hash: bCryptHashMock,
+            compare: bCryptCompareMock,
           },
         },
         {
@@ -79,9 +88,6 @@ describe('Authentication use cases', () => {
     authUseCases = module.get<AuthUseCases>(AuthUseCases);
     dataService = module.get<IDataServices>(IDataServices);
     bcrypt = module.get<IBcrypt>(IBcrypt);
-    // jwt = module.get<IJwt>(IJwt);
-    // config = module.get<IJWTConfig>(IJWTConfig);
-    // mapper = module.get<Mapper>(getMapperToken());
   });
 
   it('should be defined', () => {
@@ -89,8 +95,9 @@ describe('Authentication use cases', () => {
   });
 
   describe('When calling register method and email is unique', () => {
-    it('should create a new user', async () => {
+    it('should create a new user if email is unique', async () => {
       findByEmailMock.mockResolvedValue(null);
+      bCryptHashMock.mockResolvedValue(HASHED_PASSWORD);
 
       const user = await authUseCases.register(registerUserData);
 
@@ -108,10 +115,8 @@ describe('Authentication use cases', () => {
         refreshToken: REFRESH_TOKEN,
       });
     });
-  });
 
-  describe('When calling register method and email is not unique', () => {
-    it('should throw an error', async () => {
+    it('should throw an error if email is not unique', async () => {
       findByEmailMock.mockResolvedValue({
         ...registerUserData,
         id: 1,
@@ -121,6 +126,63 @@ describe('Authentication use cases', () => {
       await expect(authUseCases.register(registerUserData)).rejects.toThrow(
         BadRequestException,
       );
+    });
+  });
+
+  describe('When calling login method', () => {
+    it('should throw an error when user is not found', async () => {
+      findByEmailMock.mockResolvedValue(null);
+
+      await expect(authUseCases.login(loginUserData)).rejects.toThrow(
+        BadRequestException,
+      );
+    });
+
+    it('should throw an error when password is incorrect', async () => {
+      findByEmailMock.mockResolvedValue({
+        ...loginUserData,
+        password: 'simplepassword',
+      });
+
+      bCryptCompareMock.mockResolvedValue(false);
+
+      await expect(authUseCases.login(loginUserData)).rejects.toThrowError(
+        'Wrong credentials provided',
+      );
+    });
+
+    it('should return cookies when login is successful', async () => {
+      const MOCKED_COOKIE_TOKEN = 'mockedCookieWithToken';
+      const MOCKED_COOKIE_REFRESH_TOKEN = 'mockedCookieWithRefreshToken';
+
+      findByEmailMock.mockResolvedValue({
+        ...loginUserData,
+      });
+      bCryptCompareMock.mockResolvedValue(true);
+      bCryptHashMock.mockResolvedValue(HASHED_REFRESH_TOKEN);
+
+      authUseCases.generateCookieWithJwtToken = jest
+        .fn()
+        .mockResolvedValue(MOCKED_COOKIE_TOKEN);
+
+      authUseCases.generateCookieWithJwtRefreshToken = jest
+        .fn()
+        .mockResolvedValue({
+          cookieWithRefreshToken: MOCKED_COOKIE_REFRESH_TOKEN,
+          refreshToken: REFRESH_TOKEN,
+        });
+
+      const result = await authUseCases.login(loginUserData);
+
+      expect(dataService.users.saveRefreshToken).toHaveBeenCalledWith(
+        HASHED_REFRESH_TOKEN,
+        loginUserData.email,
+      );
+
+      expect(result).toEqual({
+        cookieWithJwtToken: MOCKED_COOKIE_TOKEN,
+        cookieWithRefreshToken: MOCKED_COOKIE_REFRESH_TOKEN,
+      });
     });
   });
 });
