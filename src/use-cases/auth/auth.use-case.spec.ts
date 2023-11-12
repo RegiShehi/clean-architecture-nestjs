@@ -16,6 +16,8 @@ describe('Authentication use cases', () => {
   let authUseCases: AuthUseCases;
   let dataService: IDataServices;
   let bcrypt: IBcrypt;
+  let jwt: IJwt;
+  let jwtConfig: IJWTConfig;
 
   const findByEmailMock = jest.fn();
   const bCryptCompareMock = jest.fn();
@@ -36,6 +38,8 @@ describe('Authentication use cases', () => {
   const REFRESH_TOKEN = 'somerandomstring';
   const HASHED_PASSWORD = 'hashedPassword';
   const HASHED_REFRESH_TOKEN = 'hashedRefreshToken';
+  const TOKEN_MAX_AGE = 3600;
+  const JWT_SECRET = 'jwtsecret';
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -48,6 +52,11 @@ describe('Authentication use cases', () => {
           useValue: {
             users: {
               findByEmail: findByEmailMock,
+              removeRefreshToken: jest.fn().mockResolvedValue({
+                id: 1,
+                ...loginUserData,
+                refreshToken: null,
+              }),
               saveRefreshToken: jest.fn().mockResolvedValue({
                 id: 1,
                 ...loginUserData,
@@ -70,11 +79,20 @@ describe('Authentication use cases', () => {
         },
         {
           provide: IJwt,
-          useValue: {},
+          useValue: {
+            createToken: jest.fn().mockResolvedValue(REFRESH_TOKEN),
+          },
         },
         {
           provide: IJWTConfig,
-          useValue: {},
+          useValue: {
+            getJWTExpirationTime: jest.fn().mockReturnValue(TOKEN_MAX_AGE),
+            getJWTSecret: jest.fn().mockReturnValue(JWT_SECRET),
+            getJWTRefreshTokenExpirationTime: jest
+              .fn()
+              .mockReturnValue(TOKEN_MAX_AGE),
+            getJWTRefreshTokenSecret: jest.fn().mockReturnValue(JWT_SECRET),
+          },
         },
         {
           provide: getMapperToken(),
@@ -88,6 +106,8 @@ describe('Authentication use cases', () => {
     authUseCases = module.get<AuthUseCases>(AuthUseCases);
     dataService = module.get<IDataServices>(IDataServices);
     bcrypt = module.get<IBcrypt>(IBcrypt);
+    jwt = module.get<IJwt>(IJwt);
+    jwtConfig = module.get<IJWTConfig>(IJWTConfig);
   });
 
   it('should be defined', () => {
@@ -183,6 +203,62 @@ describe('Authentication use cases', () => {
         cookieWithJwtToken: MOCKED_COOKIE_TOKEN,
         cookieWithRefreshToken: MOCKED_COOKIE_REFRESH_TOKEN,
       });
+    });
+
+    it('should generate cookie with JWT token', async () => {
+      const payload = {
+        email: 'test@test.com',
+      };
+
+      const result = await authUseCases.generateCookieWithJwtToken(payload);
+
+      expect(result).toEqual(
+        `Authorization=${REFRESH_TOKEN}; HttpOnly; Path=/; Max-Age=${TOKEN_MAX_AGE}`,
+      );
+      expect(jwt.createToken).toHaveBeenCalledWith(
+        payload,
+        JWT_SECRET,
+        TOKEN_MAX_AGE,
+      );
+      expect(jwtConfig.getJWTExpirationTime).toHaveBeenCalled();
+      expect(jwtConfig.getJWTSecret).toHaveBeenCalled();
+    });
+
+    it('should generate cookie with JWT Refresh token', async () => {
+      const payload = {
+        email: 'test@test.com',
+      };
+
+      const result =
+        await authUseCases.generateCookieWithJwtRefreshToken(payload);
+
+      expect(result).toEqual({
+        cookieWithRefreshToken: `Refresh=${REFRESH_TOKEN}; HttpOnly; Path=/; Max-Age=${TOKEN_MAX_AGE}`,
+        refreshToken: REFRESH_TOKEN,
+      });
+
+      expect(jwt.createToken).toHaveBeenCalledWith(
+        payload,
+        JWT_SECRET,
+        TOKEN_MAX_AGE,
+      );
+      expect(jwtConfig.getJWTRefreshTokenExpirationTime).toHaveBeenCalled();
+      expect(jwtConfig.getJWTRefreshTokenSecret).toHaveBeenCalled();
+    });
+  });
+
+  describe('When calling logout method', () => {
+    it('should logout a user and invalidate cookies', async () => {
+      const { email } = loginUserData;
+
+      const result = await authUseCases.logout(email);
+
+      expect(dataService.users.removeRefreshToken).toHaveBeenCalledWith(email);
+
+      expect(result).toEqual([
+        'Authorization=; HttpOnly; Path=/; Max-Age=0',
+        'Refresh=; HttpOnly; Path=/; Max-Age=0',
+      ]);
     });
   });
 });
