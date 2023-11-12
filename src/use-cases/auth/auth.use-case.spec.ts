@@ -11,6 +11,7 @@ import { LoginUserDto, RegisterUserDto } from 'src/domain/dtos/user.dto';
 import { UserProfile } from 'src/infrastructure/common/profiles/user.profile';
 import { UserViewModel } from 'src/domain/viewModels/user.view-model';
 import { BadRequestException } from '@nestjs/common';
+import { jwtMock } from 'src/utils/mocks/jwt-config.mock';
 
 describe('Authentication use cases', () => {
   let authUseCases: AuthUseCases;
@@ -86,12 +87,7 @@ describe('Authentication use cases', () => {
         {
           provide: IJWTConfig,
           useValue: {
-            getJWTExpirationTime: jest.fn().mockReturnValue(TOKEN_MAX_AGE),
-            getJWTSecret: jest.fn().mockReturnValue(JWT_SECRET),
-            getJWTRefreshTokenExpirationTime: jest
-              .fn()
-              .mockReturnValue(TOKEN_MAX_AGE),
-            getJWTRefreshTokenSecret: jest.fn().mockReturnValue(JWT_SECRET),
+            ...jwtMock(TOKEN_MAX_AGE, JWT_SECRET),
           },
         },
         {
@@ -114,7 +110,7 @@ describe('Authentication use cases', () => {
     expect(authUseCases).toBeDefined();
   });
 
-  describe('When calling register method and email is unique', () => {
+  describe('When calling register method', () => {
     it('should create a new user if email is unique', async () => {
       findByEmailMock.mockResolvedValue(null);
       bCryptHashMock.mockResolvedValue(HASHED_PASSWORD);
