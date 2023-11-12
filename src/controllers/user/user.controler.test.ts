@@ -2,27 +2,25 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import { UserController } from './user.controller';
 import { UserUseCases } from 'src/use-cases/user/user.use-case';
-import request from 'supertest';
 import { AutomapperModule, getMapperToken } from '@automapper/nestjs';
 import { classes } from '@automapper/classes';
 import { createMapper } from '@automapper/core';
-import { IDataServices } from 'src/domain/abstracts/data-services.abstract';
+import { mockedUsers } from './user.mock';
+import request from 'supertest';
 
-describe('UserController (e2e)', () => {
+describe('UserController', () => {
   let app: INestApplication;
+  let userController: UserController;
 
   beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
+    const module: TestingModule = await Test.createTestingModule({
       imports: [AutomapperModule],
       controllers: [UserController],
       providers: [
-        UserUseCases,
         {
-          provide: IDataServices,
+          provide: UserUseCases,
           useValue: {
-            users: {
-              getAll: jest.fn().mockResolvedValue([]),
-            },
+            getAllUsers: jest.fn().mockResolvedValue(mockedUsers),
           },
         },
         {
@@ -34,12 +32,23 @@ describe('UserController (e2e)', () => {
       ],
     }).compile();
 
-    app = moduleFixture.createNestApplication();
+    app = module.createNestApplication();
 
     await app.init();
+
+    userController = module.get<UserController>(UserController);
   });
 
-  it('/users (GET)', () => {
-    return request(app.getHttpServer()).get('/users').expect(200);
+  describe('when calling /users (GET)', () => {
+    it('should be defined', () => {
+      expect(userController.getAll).toBeDefined();
+    });
+
+    it('should return a list of users', () => {
+      return request(app.getHttpServer())
+        .get('/users')
+        .expect(200)
+        .expect(mockedUsers);
+    });
   });
 });
