@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { AuthorController } from './controllers/author.controller';
 import { BookController } from './controllers/book.controller';
 import { APP_FILTER } from '@nestjs/core';
-import { UserController } from './controllers/user.controller';
+import { UserController } from './controllers/user/user.controller';
 import { AuthController } from './controllers/auth.controller';
 import { AllExceptionFilter } from './infrastructure/services/exceptions/exception.filter';
 import { ServicesModule } from './infrastructure/services/services.module';
